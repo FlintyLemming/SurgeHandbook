@@ -15,7 +15,7 @@ http-request ^http://httpbin.org script-path=http-request.js,max-size=16384,debu
 dns local script-path=dns.js,debug=true
 ```
 
-每一行包含三个部分：type、value、parameters。每一种 type 对应不一样的 value 。
+每一行包含三个部分：type、value、parameters。每一种 type 对应不一样的 value。
 
 公共参数：
 
@@ -24,7 +24,7 @@ dns local script-path=dns.js,debug=true
 - debug：启用调试模式。在每一次执行脚本时会从文件系统加载脚本。
 - timeout：脚本运行的最常时间。默认值是 10 秒。
 
-http-request/http-response 的可用的参数：
+http-request/http-response 可用的参数：
 
 - requires-body：允许脚本修改请求和响应的正文部分。默认值为 false。这个行为过多的资源，请在必要时选择。
 - max-size: 请求和响应的正文部分允许的最大值。默认值为 131072 字节（128KB）。
@@ -33,7 +33,7 @@ http-request/http-response 的可用的参数：
 
 请为必要的网址使用脚本功能。
 
-如果请求的响应的正文部分超过了max-size的值，Surge会回退到passthrough模式并跳过这个脚本。
+如果请求的响应的正文部分超过了 max-size 的值，Surge 会回退到 passthrough 模式并跳过这个脚本。
 
 ## 基本约束
 
@@ -45,64 +45,59 @@ http-request/http-response 的可用的参数：
 
 ## 公共API
 
-- `console.log(message<String>)`
+- `console.log(message<String>)`  
   输出日志到Surge的日志文件。
-- `setTimeout(function[, delay])`
+- `setTimeout(function[, delay])`  
   与浏览器中的setTimeout行为相同。
-- `$httpClient.post(URL<String> or options<Object>, callback<Function>)`
+- `$httpClient.post(URL<String> or options<Object>, callback<Function>)`  
   发起一个 HTTP 的 POST 请求。第一个参数可以是一个 URL 或对象。下面是对象的示例。
   ```json
   {
-  url: "http://www.example.com/",
+    url: "http://www.example.com/",
       headers: {
-      Content-Type: "application/json"
+        Content-Type: "application/json"
       },
-  body: "{}"
+    body: "{}"
   }
   ```
-  使用对象作为选项时，`url`是必选的，如果`header`存在，他会覆盖现有的 Header字段。`body`可以是字符串或对象。当传入对象时，会被编码为JSON字符串，并将 'Content-Type' 设置为 'application/json'。
-
-  `callback: callback(error, response, data)`
-
-  运行成功时, `error` 传入 null，`response` 包含 'status' 和 'headers'.
-
+  使用对象作为选项时，`url` 是必选的，如果 `header` 存在，他会覆盖现有的 Header字段。`body` 可以是字符串或对象。当传入对象时，会被编码为JSON字符串，并将 'Content-Type' 设置为 'application/json'。  
+  `callback: callback(error, response, data)`  
+  运行成功时, `error` 传入 `null`，`response` 包含 'status' 和 'headers'。  
   类似的函数有：`$httpClient.get`，`$httpClient.put`，`$httpClient.delete`，`$httpClient.head`，`$httpClient.options`，`$httpClient.patch`。
 
-- `$notification.post(title<String>, subtitle<String>, body<String>)`
+- `$notification.post(title<String>, subtitle<String>, body<String>)`  
   发送一个通知。
 
-- `$utils.geoip(ip<String>)`
-  执行 GeoIP 查找. 返回 ISO 3166 格式的代码.
+- `$utils.geoip(ip<String>)`  
+  执行 GeoIP 查找。返回 ISO 3166 格式的代码。
 
-- `$surge.setSelectGroupPolicy(groupName<String>, policyName<String>)`
+- `$surge.setSelectGroupPolicy(groupName<String>, policyName<String>)`  
   设置选择策略组的策略。成功返回 true。
 
-- `$surge.selectGroupDetails()`
+- `$surge.selectGroupDetails()`  
   获取所有选择策略组的策略的细节。
 
-- `$surge.setOutboundMode(mode<String>)`
-  设置出站模式，可选值'direct'，'global-proxy'或'rule'。成功返回 true。
+- `$surge.setOutboundMode(mode<String>)`  
+  设置出站模式，可选值 'direct'，'global-proxy' 或 'rule'。成功返回 true。
 
 - `$surge.setHTTPCaptureEnabled(enabled<Boolean>)`
 - `$surge.setCellularModeEnabled(enabled<Boolean>)`
 - `$surge.setRewriteEnabled(enabled<Boolean>)`
-- `$surge.setEnhancedModeEnabled(enabled<Boolean>)` Surge Mac 可用。
-  
-  控制 Surge 功能的状态
+- `$surge.setEnhancedModeEnabled(enabled<Boolean>)` Surge Mac 可用。  
+  控制 Surge 功能的状态。
 
-- `$network`
+- `$network`  
   这个对象包含了网络环境的信息。
 
-- `$script.name<String>`
+- `$script.name<String>`  
   正在执行的脚本名。
 
-- `$script.startTime<Date>`
+- `$script.startTime<Date>`  
   当前脚本的启动时间。
 
-- `$persistentStore.write(data<String>, [key<String>])`
+- `$persistentStore.write(data<String>, [key<String>])`  
   写入持久化数据。只允许传入字符串，成功返回 true。
 
-- `$persistentStore.read([key<String>])`
-  后去保存的数据，返回字符串或空值。
-
+- `$persistentStore.read([key<String>])`  
+  后去保存的数据，返回字符串或空值。  
   如果相同路径的脚本数据存储池中未定义该键，会从其他的脚本中获取相同键的数据。即可以使用键在不同的脚本之间共享数据。
