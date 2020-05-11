@@ -15,42 +15,42 @@ http-request ^http://httpbin.org script-path=http-request.js,max-size=16384,debu
 dns local script-path=dns.js,debug=true
 ```
 
-每一行包含三个部分：type、value、parameters。每一种 type 对应不一样的 value。
+每一行以空格分隔为三个部分，第一部分为脚本类型，第二部分为值，第三部分为参数表。
 
-公共参数：
+不同类型的脚本对值的用途不一样，具体参见后文。
 
-- script-path：脚本的路径，可以是配置文件目录的相对路径也可以是绝对路径或 URL。
-- script-update-interval：脚本的更新间隔，使用 URL 作为脚本路径时可以，单位秒。
-- debug：启用调试模式。在每一次执行脚本时会从文件系统加载脚本。
-- timeout：脚本运行的最常时间。默认值是 10 秒。
+参数表包含的参数有：
+
+- script-path：脚本的路径，可以是相对路径、绝对路径或者 URL。
+- script-update-interval：当脚本路径为 URL 时的自动更新频率，单位为秒。
+- debug：开启 debug 模式，如果是一个本地脚本，那么每次执行脚本时，都会从本地存储重新加载脚本，方便调试。
+- timeout：脚本的最长运行时间，默认为 10s。
 
 http-request/http-response 可用的参数：
 
-- requires-body：允许脚本修改请求和响应的正文部分。默认值为 false。这个行为过多的资源，请在必要时选择。
-- max-size: 请求和响应的正文部分允许的最大值。默认值为 131072 字节（128KB）。
+- requires-body：表示该脚本需要对 body 进行处理，默认为 false。如果只需要修改 URL 或者 Headers 请不要开启该选项，将大幅节约资源。
+- max-size: 表示该脚本最大允许处理的 body 大小，若超过则放弃处理，默认值为 131072 (128KB)。
 
-脚本需要将响应的正文部分整体载入到内存。一个巨大的相应体正文可能会引发 Surge iOS 的崩溃，因为 iOS 系统限制了 Network Extension 可以占用的最大内存。
+由于进行脚本修改会需要 Surge 先将 response body 完全下载后再进行处理，如果遇到了较大的数据将导致内存占用量暴增，Surge iOS 受系统内存限制在该情况下极易被直接终止。所以请务必仔细配置 URL 匹配规则，仅对需要的 URL 进行处理。
 
-请为必要的网址使用脚本功能。
+当返回的数据长度超过 max-size 设定值后，Surge 将放弃对该请求执行脚本并回退到 passthrough 模式。
 
-如果请求的响应的正文部分超过了 max-size 的值，Surge 会回退到 passthrough 模式并跳过这个脚本。
+## 基本定义
 
-## 基本约束
-
-脚本允许进行异步的操作。即使不需要结果的脚本，也需要调用`$done(value)`来表明已经结束。否则，脚本会因为超时而触发警告。
+所有脚本允许异步操作，使用 `$done(value<Object>)` 方法表示完成并返回相应结果。即使是不要求返回结果的脚本类型也应当在完成任务后调用 `$done()` 退出，否则脚本会因为超时而产生警告。
 
 ## 性能
 
-你不需要太担心性能问题。JavaScript Core 非常的高效。
+JS Script 的执行效率极高，不必担心因使用脚本而带来性能问题（Body 修改类除外，会影响整体逻辑），在我们的测试环境下，一个简单脚本的完整执行仅耗时 0.2ms。
 
 ## 公共API
 
 - `console.log(message<String>)`  
-  输出日志到Surge的日志文件。
+  输出到 Surge 日志
 - `setTimeout(function[, delay])`  
-  与浏览器中的setTimeout行为相同。
+  与浏览器的 setTimeout 方法一致
 - `$httpClient.post(URL<String> or options<Object>, callback<Function>)`  
-  发起一个 HTTP 的 POST 请求。第一个参数可以是一个 URL 或对象。下面是对象的示例。
+  发起一个 HTTP POST 请求。第一个参数可以是一个 URL 或参数表，参数表为。
   ```json
   {
     url: "http://www.example.com/",
@@ -60,44 +60,44 @@ http-request/http-response 可用的参数：
     body: "{}"
   }
   ```
-  使用对象作为选项时，`url` 是必选的，如果 `header` 存在，他会覆盖现有的 Header字段。`body` 可以是字符串或对象。当传入对象时，会被编码为JSON字符串，并将 'Content-Type' 设置为 'application/json'。  
-  `callback: callback(error, response, data)`  
-  运行成功时, `error` 传入 `null`，`response` 包含 'status' 和 'headers'。  
-  类似的函数有：`$httpClient.get`，`$httpClient.put`，`$httpClient.delete`，`$httpClient.head`，`$httpClient.options`，`$httpClient.patch`。
+  当使用参数表时，`url` 参数必选，其余选填，`header` 字段存在会覆盖默认的所有 Header。`body` 可以是 string 或 object。当为 object 时，将自动进行 JSON 编码，并设置 'Content-Type' 为 'application/json'。  
+  callback定义为`callback(error<String>, response<Object>, data<String>)`  
+  error 为 Null 表示请求成功，response 包含 status 和 headers 两个字段。  
+  其余类似的方法有：`$httpClient.get`，`$httpClient.put`，`$httpClient.delete`，`$httpClient.head`，`$httpClient.options`，`$httpClient.patch`。
 
 - `$notification.post(title<String>, subtitle<String>, body<String>)`  
-  发送一个通知。
+  向通知中心发送通知，Surge iOS 上需开启通知总开关
 
 - `$utils.geoip(ip<String>)`  
-  执行 GeoIP 查找。返回 ISO 3166 格式的代码。
+  进行 GeoIP 查询，返回结果为 ISO 3166 的国家编码
 
 - `$surge.setSelectGroupPolicy(groupName<String>, policyName<String>)`  
-  设置选择策略组的策略。成功返回 true。
+  修改 select 策略组的当前选项，返回 bool 值表示是否成功
 
 - `$surge.selectGroupDetails()`  
-  获取所有选择策略组的策略的细节。
+  获得当前 select 策略组的信息，包含组名称，子策略，和当前选择的策略
 
 - `$surge.setOutboundMode(mode<String>)`  
-  设置出站模式，可选值 'direct'，'global-proxy' 或 'rule'。成功返回 true。
+  mode 取值可为 "direct", "global-proxy", "rule"，修改 Surge 的 Outbound Mode，返回 bool 值表示是否成功
 
 - `$surge.setHTTPCaptureEnabled(enabled<Boolean>)`
 - `$surge.setCellularModeEnabled(enabled<Boolean>)`
 - `$surge.setRewriteEnabled(enabled<Boolean>)`
-- `$surge.setEnhancedModeEnabled(enabled<Boolean>)` Surge Mac 可用。  
-  控制 Surge 功能的状态。
+- `$surge.setEnhancedModeEnabled(enabled<Boolean>)` 仅 Surge Mac 可用  
+  以上四项，用于控制 Surge 的各项功能的开启
 
 - `$network`  
-  这个对象包含了网络环境的信息。
+  当前网络状态的总览，包含 IP 和 SSID 等信息
 
 - `$script.name<String>`  
-  正在执行的脚本名。
+  当前执行的脚本的文件名
 
 - `$script.startTime<Date>`  
-  当前脚本的启动时间。
+  当前执行的脚本的开始时间
 
 - `$persistentStore.write(data<String>, [key<String>])`  
-  写入持久化数据。只允许传入字符串，成功返回 true。
+  持久化保存数据，返回 bool 值表示是否成功，仅支持传入 string
 
 - `$persistentStore.read([key<String>])`  
-  后去保存的数据，返回字符串或空值。  
-  如果相同路径的脚本数据存储池中未定义该键，会从其他的脚本中获取相同键的数据。即可以使用键在不同的脚本之间共享数据。
+  读取保存的持久化数据，返回 string 或 Null  
+  不传入 key 时，同一个 script-path 的脚本共享一个存储池。可传入一个固定的 key 以在多个脚本间共享数据。
