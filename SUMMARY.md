@@ -16,3 +16,5 @@
   * [计划任务](scripting/cron.md)
 * [其他](others/README.md)
   * [模块](others/module.md)
+  * [URL Scheme](others/url-scheme.md)
+  
