@@ -1,4 +1,4 @@
-脚本需要 Surge iOS 4 或 Surge Mac 3.3.0 以上版本
+*脚本需要 Surge iOS 4 或 Surge Mac 3.3.0 以上版本*
 
 # 脚本
 
