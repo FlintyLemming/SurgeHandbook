@@ -16,4 +16,5 @@
   * [计划任务](scripting/cron.md)
 * [其他](others/README.md)
   * [杂项](others/misc-options.md)
+  * [托管配置](others/managed-configuration.md)
   * [模块](others/module.md)
