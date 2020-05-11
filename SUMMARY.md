@@ -16,5 +16,3 @@
   * [计划任务](scripting/cron.md)
 * [其他](others/README.md)
   * [模块](others/module.md)
-* [有问题？](question/README.md)
-
