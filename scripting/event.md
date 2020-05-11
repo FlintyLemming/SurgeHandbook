@@ -1,5 +1,5 @@
 # 事件（Event）
- > **💡本页文档来自[官方社区](https://community.nssurge.com/d/33-scripting)**
+ > 💡**本页文档来自[官方社区](https://community.nssurge.com/d/33-scripting)**
 
 在发生特定事件时执行脚本，该类型下第二参数为事件名称，目前只有 network-changed 一个事件。
 

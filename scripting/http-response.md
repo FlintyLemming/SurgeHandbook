@@ -1,5 +1,5 @@
 # HTTP 返回（HTTP Response）
- > **💡本页文档来自[官方社区](https://community.nssurge.com/d/33-scripting)**
+ > 💡**本页文档来自[官方社区](https://community.nssurge.com/d/33-scripting)**
 
 用于修改 HTTP 返回体，该类型下第二参数为匹配 URL 的正则表达式，被匹配到的请求会被执行脚本。
 
