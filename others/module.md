@@ -1,5 +1,5 @@
 # 模块
- > 部分翻译来源于：[Surge 官方社区 —— Module](https://community.nssurge.com/d/225-module)
+ > **💡本页文档来自[官方社区](https://community.nssurge.com/d/225-module)**
 
 Module（模块）是一系列设置的集合，可用于覆盖当前配置的部分设定，有非常多的使用场景：
 

@@ -1,6 +1,5 @@
 # 计划任务 （cron）
-
-**💡本页文档来自[官方社区](https://community.nssurge.com/d/33-scripting)**
+ > **💡本页文档来自[官方社区](https://community.nssurge.com/d/33-scripting)**
 
 可配置 Surge 在特定的时间执行脚本，触发时间配置使用 crontab 的样式。该类型下第二参数为 crontab 表达式，常见的 crontab 为五位表示，即 * * * * * 表示每分钟执行一次，Surge 兼容五位表示和六位表示，可用 * * * * * * 表示每秒钟执行一次。但不支持 @daily 这样的别名。
 

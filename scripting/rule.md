@@ -1,6 +1,5 @@
 # 脚本规则（rule）
-
-**💡本页文档来自[官方社区](https://community.nssurge.com/d/33-scripting)**
+ > **💡本页文档来自[官方社区](https://community.nssurge.com/d/33-scripting)**
 
 使用脚本进行规则判定，该类型下第二参数为规则名
 

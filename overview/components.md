@@ -1,3 +1,5 @@
+# 组件
+
 Surge 由几个组件构成
 
 ### **Surge Proxy Server**
