@@ -1,6 +1,5 @@
 # DNS
-
-**💡本页文档来自[官方社区](https://community.nssurge.com/d/33-scripting)**
+ > 💡**本页文档来自[官方社区](https://community.nssurge.com/d/33-scripting)**
 
 使用脚本去执行 DNS 解析操作，该类型下第二参数为脚本名。
 
