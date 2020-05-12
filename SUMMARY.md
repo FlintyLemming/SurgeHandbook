@@ -12,6 +12,8 @@
   * [杂项规则](rule/misc-rule.md)
   * [规则集](rule/ruleset.md)
   * [Final 规则](rule/final.md)
+* [策略](policy/README.md)
+  * [代理](policy/proxy.md)
 * [脚本](scripting/README.md)
   * [基础](scripting/common.md)
   * [HTTP 请求](scripting/http-request.md)
