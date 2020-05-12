@@ -1,6 +1,6 @@
 ## URL Scheme（仅 Surge iOS）
 
-Surge iOS 支持 4 种操作和 1 种选项。
+Surge iOS 支持 4 种操作和 1 种参数。
 
 操作：
 
@@ -20,7 +20,7 @@ Surge iOS 支持 4 种操作和 1 种选项。
 
     从某个 URL 安装配置文件。该 URL 需先通过百分号编码处理。
 
-选项：
+参数：
 
 - `autoclose=true`
 
