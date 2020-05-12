@@ -17,6 +17,7 @@
 * [其他](others/README.md)
   * [杂项](others/misc-options.md)
   * [托管配置](others/managed-configuration.md)
+  * [增强模式](others/enhanced-mode.md)
   * [模块](others/module.md)
   * [URL Scheme](others/url-scheme.md)
   
