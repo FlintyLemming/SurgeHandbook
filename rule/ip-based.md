@@ -13,6 +13,12 @@ IP-CIDR,127.0.0.1/8,DIRECT
 
 规则会匹配规则范围内请求的 IP 地址
 
+#### IP-CIDR6
+
+  IP-CIDR6,2001:db8:abcd:8000::/50,DIRECT
+
+规则会匹配规则范围内请求的 IPv6 地址
+
 #### GEOIP
 
 `GEOIP,US,DIRECT`
