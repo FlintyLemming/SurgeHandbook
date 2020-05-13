@@ -15,6 +15,7 @@
 * [策略](policy/README.md)
   * [代理策略](policy/proxy.md)
   * [内置策略](policy/build-in.md)
+  * [策略组](policy/group.md)
 * [脚本](scripting/README.md)
   * [基础](scripting/common.md)
   * [HTTP 请求](scripting/http-request.md)
