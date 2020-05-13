@@ -15,7 +15,9 @@ IP-CIDR,127.0.0.1/8,DIRECT
 
 #### IP-CIDR6
 
-  IP-CIDR6,2001:db8:abce:8000::/50,DIRECT
+```
+IP-CIDR6,2001:db8:abce:8000::/50,DIRECT
+```
 
 规则会匹配规则范围内请求的 IPv6 地址
 
