@@ -2,7 +2,7 @@
 
 一个策略组可以包含多个策略，然后这个策略组本身可以被当成一个策略来使用，并且也可以被嵌套。
 
-有以下几种类型的策略组：select、url-test 和 ssid。配置文件中，在 [Proxy Group] 下定义策略组。
+有以下几种类型的策略组：select、url-test 和 ssid。配置文件中，在 \[Proxy Group\] 下定义策略组。
 
 ## 手动选择的策略组
 
@@ -86,7 +86,8 @@ Surge 会发送一个 HTTP 头请求到目的地址。这个测试只关心是�
 
 这个文件包含了一系列的策略，格式如下：
 
-```
+```text
 Proxy-A = https, example1.com, 443
 Proxy-B = https, example2.com, 443
 ```
+

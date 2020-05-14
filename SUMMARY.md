@@ -1,8 +1,9 @@
 # Table of contents
 
+* [简介](README.md)
 * [总览](overview/README.md)
- * [组件](overview/components.md)
- * [配置文件](overview/configuration.md)
+  * [组件](overview/components.md)
+  * [配置文件](overview/configuration.md)
 * [代理规则](rule/README.md)
   * [域名规则](rule/domain-based.md)
   * [IP 地址规则](rule/ip-based.md)
@@ -37,7 +38,7 @@
   * [增强模式](others/enhanced-mode.md)
   * [SSID 挂起](others/ssid-suspend.md)
   * [URL Scheme](others/url-scheme.md)
-  * [Snell 服务端](others/snell.md)
+  * [Snell 服务端](others/snell-fu-wu-duan.md)
   * [模块](others/module.md)
   * [DNS over HTTPS](others/doh.md)
-  
+

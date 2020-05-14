@@ -6,7 +6,7 @@
 
 例子：
 
-```
+```text
 [Header Rewrite]
 ^http://example.com header-add DNT 1
 ^http://example.com header-del Cookie
@@ -15,13 +15,13 @@
 
 每条规则包含 4 个部分：URL 正则表达式、行为类型、请求头里的哪个部分以及变量。T
 
-### **header-add**
+## **header-add**
 
 像请求头中附加一条属性。
 
 例子：
 
-```
+```text
 [Header Rewrite]
 ^http://example.com header-add DNT 1
 
@@ -43,13 +43,13 @@ Accept-Encoding: gzip, deflate
 DNT: 1
 ```
 
-### **header-del**
+## **header-del**
 
 删除请求头中的某条属性。
 
 例子：
 
-```
+```text
 [Header Rewrite]
 ^http://example.com header-del DNT
 
@@ -71,13 +71,13 @@ Accept-Language: en-us
 Accept-Encoding: gzip, deflate
 ```
 
-### **header-replace**
+## **header-replace**
 
 替换请求头中某条属性的值。
 
 例子：
 
-```
+```text
 [Header Rewrite]
 ^http://example.com header-replace DNT 1
 
@@ -102,8 +102,9 @@ DNT: 1
 
 如果你想添加或替换请求头中的任意一个参数，你可以将 header-add 和 header-del 组合起来用。
 
-```
+```text
 [Header Rewrite]
 ^http://example.com header-del DNT
 ^http://example.com header-add DNT 1
 ```
+
