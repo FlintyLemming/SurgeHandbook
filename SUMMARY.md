@@ -21,6 +21,8 @@
   * [本地 DNS 映射](dns/local-dns-mapping.md)
 * [HTTP 处理](http-processing/README.md)
   * [HTTPS 解密](http-processing/mitm.md)
+  * [重写 URL](http-processing/url-rewrite.md)
+  * [重写请求头](http-processing/header-rewrite.md)
 * [脚本](scripting/README.md)
   * [基础](scripting/common.md)
   * [HTTP 请求](scripting/http-request.md)
