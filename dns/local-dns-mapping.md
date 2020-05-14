@@ -12,7 +12,7 @@ bar.com = server:8.8.8.8
 
 ## 通配符
 
-你可以像下面这样使用像 * 这样的通配符匹配整个域名。但这个 * 能匹配一整个不被 . 分隔的字符串，所以使用时请注意。例如，*google.com 可以匹配 google.com、foo.google.com 和 bargoogle.com。而 *.google.com 则**不能**匹配 google.com。
+你可以像下面这样使用像 \* 这样的通配符匹配整个域名。但这个 \* 能匹配一整个不被 . 分隔的字符串，所以使用时请注意。例如，\*google.com 可以匹配 google.com、foo.google.com 和 bargoogle.com。而 \*.google.com 则**不能**匹配 google.com。
 
 ```text
 [Host]
