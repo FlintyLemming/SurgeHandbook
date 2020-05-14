@@ -38,7 +38,7 @@
   * [增强模式](others/enhanced-mode.md)
   * [SSID 挂起](others/ssid-suspend.md)
   * [URL Scheme](others/url-scheme.md)
-  * [Snell 服务端](others/snell-fu-wu-duan.md)
+  * [Snell 服务端](others/snell-server.md)
   * [模块](others/module.md)
   * [DNS over HTTPS](others/doh.md)
 
