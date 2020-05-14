@@ -36,6 +36,8 @@
   * [托管配置](others/managed-configuration.md)
   * [增强模式](others/enhanced-mode.md)
   * [SSID 挂起](others/ssid-suspend.md)
-  * [模块](others/module.md)
   * [URL Scheme](others/url-scheme.md)
+  * [Snell 服务端](others/snell.md)
+  * [模块](others/module.md)
+  * [DNS over HTTPS](others/doh.md)
   
