@@ -4,57 +4,45 @@
 
 DIRECT 和 REJECT 这两个策略可以直接用。或者你也可以像下面这样，用一个名字代替这两个内置策略。
 
-```text
-[Proxy]
-On = direct
-Off = reject
-```
+    [Proxy]
+    On = direct
+    Off = reject
 
 但这个逻辑比较奇怪，请看下面的辨析。
 
 这样写是错的：
 
-```bash
-[Rule]
-DOMAIN-SUFFIX,test-ipv6.com,direct
-```
+    [Rule]
+    DOMAIN-SUFFIX,test-ipv6.com,direct
 
 但这样写是对的：
 
-```bash
-[Proxy]
-on, direct
-
-[Rule]
-DOMAIN-SUFFIX,test-ipv6.com,on
-```
+    [Proxy]
+    on, direct
+    
+    [Rule]
+    DOMAIN-SUFFIX,test-ipv6.com,on
 
 这样写是对的：
 
-```bash
-[Rule]
-DOMAIN-SUFFIX,test-ipv6.com,DIRECT
-```
+    [Rule]
+    DOMAIN-SUFFIX,test-ipv6.com,DIRECT
 
 但这样写是错的：
 
-```bash
-[Proxy]
-on, DIRECT
+    [Proxy]
+    on, DIRECT
 
-[Rule]
-DOMAIN-SUFFIX,test-ipv6.com,on
-```
+    [Rule]
+    DOMAIN-SUFFIX,test-ipv6.com,on
 
 ## 网络接口选项
 
 直连策略支持指定网络接口，即可以使用”interface“这个参数。
 
-```text
-[Proxy]
-Crop-VPN = direct, interface = utun0
-WiFi = direct, interface = en2, allow-other-interface=true
-```
+    [Proxy]
+    Crop-VPN = direct, interface = utun0
+    WiFi = direct, interface = en2, allow-other-interface=true
 
 请确保指定的网络接口到目的地址有正确的路由表。
 

@@ -1,4 +1,4 @@
-# HTTPS 解密
+# HTTPS 解密（中间人攻击，MitM）
 
 Surge 通过中间人攻击（MitM）解密 HTTPS 流量。你可以参考维基百科的这篇文章获取关于 MitM 的更多信息：[Wikipedia](https://en.wikipedia.org/wiki/Man-in-the-middle_attack)。
 
