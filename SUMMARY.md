@@ -19,6 +19,8 @@
 * [DNS](dns/README.md)
   * [DNS 服务器](dns/dns-override.md)
   * [本地 DNS 映射](dns/local-dns-mapping.md)
+* [HTTP 处理](http-processing/README.md)
+  * [HTTPS 解密](http-processing/mitm.md)
 * [脚本](scripting/README.md)
   * [基础](scripting/common.md)
   * [HTTP 请求](scripting/http-request.md)
