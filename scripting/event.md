@@ -8,11 +8,9 @@
 
 一个简单样例
 
-```text
-// event network-changed script-path=network-changed.js
+    // event network-changed script-path=network-changed.js
 
-$notification.post('DNS Update', $network.dns.join(', '));
+    $notification.post('DNS Update', $network.dns.join(', '));
 
-$done();
-```
+    $done();
 

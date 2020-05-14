@@ -1,6 +1,6 @@
 # 基础
 
-_脚本需要 Surge iOS 4 或 Surge Mac 3.3.0 以上版本_
+*脚本需要 Surge iOS 4 或 Surge Mac 3.3.0 以上版本*
 
 ## 脚本
 
@@ -8,14 +8,12 @@ _脚本需要 Surge iOS 4 或 Surge Mac 3.3.0 以上版本_
 
 ### 脚本字段
 
-```text
-[Script]
-http-response ^http://www.example.com/test script-path=test.js,max-size=16384,debug=true
-cron "* * * * *" script-path=fired.js
-policy-group worst script-path=worst.js,debug=true
-http-request ^http://httpbin.org script-path=http-request.js,max-size=16384,debug=true,requires-body=true
-dns local script-path=dns.js,debug=true
-```
+    [Script]
+    http-response ^http://www.example.com/test script-path=test.js,max-size=16384,debug=true
+    cron "* * * * *" script-path=fired.js
+    policy-group worst script-path=worst.js,debug=true
+    http-request ^http://httpbin.org script-path=http-request.js,max-size=16384,debug=true,requires-body=true
+    dns local script-path=dns.js,debug=true
 
 每一行以空格分隔为三个部分，第一部分为脚本类型，第二部分为值，第三部分为参数表。
 
