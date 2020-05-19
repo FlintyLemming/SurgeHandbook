@@ -8,7 +8,7 @@ Surge 可以通过两种方式来重写请求的 URL，或者根据 URL 拒绝�
 [URL Rewrite]
 ^http://www\.google\.cn http://www.google.com header
 ^http://yachen\.com https://yach.me 302
-^http://ad\.com/ad\.png _ reject
+^http://ad\.com/ad\.png - reject
 ```
 
 一条重写规则由 3 部分组成：正则表达式、替换的内容和类型。
@@ -41,6 +41,6 @@ Surge 会直接返回一个 302 重定向的响应。如果启用了 MitM，并�
 
 ```text
 [URL Rewrite]
-^http://ad\.com/ad\.png _ reject
+^http://ad\.com/ad\.png - reject
 ```
 
