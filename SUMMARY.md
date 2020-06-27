@@ -36,6 +36,7 @@
   * [杂项](others/misc-options.md)
   * [托管配置](others/managed-configuration.md)
   * [增强模式](others/enhanced-mode.md)
+  * [网关模式](others/gateway-mode.md)
   * [SSID 挂起](others/ssid-suspend.md)
   * [URL Scheme](others/url-scheme.md)
   * [Snell 服务端](others/snell-server.md)
