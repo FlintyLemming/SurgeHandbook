@@ -42,4 +42,5 @@
   * [Snell 服务端](others/snell-server.md)
   * [模块](others/module.md)
   * [DNS over HTTPS](others/doh.md)
+  * [HTTP API](others/http-api.md)
 
