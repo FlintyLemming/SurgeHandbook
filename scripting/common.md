@@ -4,7 +4,7 @@
 
 ## 脚本
 
-使用 JavaScripe 随心所欲的拓展 Surge 功能。
+使用 JavaScript 随心所欲的拓展 Surge 功能。
 
 ### 脚本字段
 
