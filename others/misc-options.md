@@ -27,8 +27,6 @@ loglevel = notify
 
 可选值为 verbose info notify 和 warning。不建议在日常使用中开启 verbose，因为这会消耗过多的资源使系统变慢。
 
-loglevel = notify
-
 ### skip-proxy
 
 ```
@@ -98,11 +96,11 @@ force-http-engine-hosts = example.com:80
 
 例如：
 
-`-*.apple.com`: 排除所有去往 *.apple.com 的 80 端口。
-`www.google.com`: 强制 HTTP 引擎处理通往 www.google.com 的 80 端口的请求。
-`www.google.com:8080`: 强制 HTTP 引擎处理通往 www.google.com 的 8080 端口的请求。
-`www.google.com:0`: 强制 HTTP 引擎处理通往 www.google.com 所有端口的请求。
-`*:0`: 强制 HTTP 引擎处理通往所有主机的所有端口请求。
+- `-*.apple.com`: 排除所有去往 *.apple.com 的 80 端口。
+- `www.google.com`: 强制 HTTP 引擎处理通往 www.google.com 的 80 端口的请求。
+- `www.google.com:8080`: 强制 HTTP 引擎处理通往 www.google.com 的 8080 端口的请求。
+- `www.google.com:0`: 强制 HTTP 引擎处理通往 www.google.com 所有端口的请求。
+- `*:0`: 强制 HTTP 引擎处理通往所有主机的所有端口请求。
 
 ### tun-excluded-routes
 
@@ -112,7 +110,7 @@ tun-excluded-routes = 192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12
 
 Surge VIF 只能处理 TCP 和 UDP 协议。使用此选项可以绕过特定的 IP 范围，允许所有流量通过。
 
-> 注意：此选项只适用于 Surge VIF。由 Surge 代理服务器处理的请求不受影响。结合`skip-proxy` 和 `tun-excluded-routes` 来确保特定的 HTTP 流量绕过 Surge。
+> 注意：此选项只适用于 Surge VIF。由 Surge 代理服务器处理的请求不受影响。结合`skip-proxy` 和 `tun-excluded-routes` 来确保特定的 HTTP 流量绕过 Surge。  
 > 这个选项可能会导致系统错误 ENOMEM（无法分配内存）。这似乎是 iOS 系统的一个 Bug。如果可能的话，请不要使用这个选项。
 
 ### tun-included-routes
@@ -123,19 +121,35 @@ tun-included-routes = 192.168.1.12/32
 
 在默认情况下，Surge VIF 声明自己为默认路由。但是，由于 Wi-Fi 接口的路由较小，有些流量可能不会通过 Surge VIF 接口。使用此选项可以添加一个较小的路由。
 
-compatibility-mode （仅iOS）
-allow-wifi-access （仅iOS）
-wifi-access-http-port （仅iOS）
-wifi-access-socks5-port （仅iOS）
-show-error-page-for-reject
-exclude-simple-hostnames
-socks5-listen （仅macOS）
-http-listen （仅macOS）
-proxy-test-url
-test-timeout
-internet-test-url
-read-etc-hosts
-network-framework
-tls-provider
-debug-cpu-usage
-debug-memory-usage
+
+### compatibility-mode （仅iOS）
+
+### allow-wifi-access （仅iOS）
+
+### wifi-access-http-port （仅iOS）
+
+### wifi-access-socks5-port （仅iOS）
+
+### show-error-page-for-reject
+
+### exclude-simple-hostnames
+
+### socks5-listen （仅macOS）
+
+### http-listen （仅macOS）
+
+### proxy-test-url
+
+### test-timeout
+
+### internet-test-url
+
+### read-etc-hosts
+
+### network-framework
+
+### tls-provider
+
+### debug-cpu-usage
+
+### debug-memory-usage
