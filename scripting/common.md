@@ -11,9 +11,9 @@
 ```ini
 [Script]
 script1 = type=http-response,pattern=^http://www.example.com/test script-path=test.js,max-size=16384,debug=true
-scropt2 = type=cron,cronexp="* * * * *",script-path=fired.js
-scropt3 = type=http-request,pattern=^http://httpbin.org script-path=http-request.js,max-size=16384,debug=true,requires-body=true
-scropt4 = type=dns,script-path=dns.js,debug=true
+script2 = type=cron,cronexp="* * * * *",script-path=fired.js
+script3 = type=http-request,pattern=^http://httpbin.org script-path=http-request.js,max-size=16384,debug=true,requires-body=true
+script4 = type=dns,script-path=dns.js,debug=true
 ```
 
 每一行都有两个组成部分：脚本名称、参数。常见的参数：
