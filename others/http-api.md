@@ -232,6 +232,19 @@ POST 方法请求示例:
 
 切换到另一个配置。
 
+* GET /v1/profiles （仅 Surge Mac 4.0.6 及以上版本可用）
+
+获取可用的配置文件名。
+
+* POST /v1/profiles/check （仅 Surge Mac 4.0.6 及以上版本可用）
+
+请求示例：
+
+```json
+{"name": "Profile2"}
+```
+
+检查配置。如果配置文件无效返回错误，否则 "error" 字段为空。
 ## DNS
 * POST /v1/dns/flush
 
