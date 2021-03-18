@@ -17,9 +17,9 @@
 * `headers<Object>`：使用该 headers 词典完全覆盖原来的 headers，注意部分 HTTP 特殊字段不可被修改，如 Content-Length
 * `body<String>`：使用该 body 覆盖原来的请求 body，仅当 requires-body = true 时有效。
 * `response<Object>`：如果返回了该字段，则表示应直接返回该结果而不进行实际的网络请求，仅当 requires-body = false 时有效。可包含三个字段：
-  * `$status<Number>`: 响应的 HTTP 状态码。
-  * `$headers<Object>`: 响应的 HTTP Headers。
-  * `$body<String>`: 响应的 HTTP Body，将以 UTF-8 编码后返回。
+  * `status<Number>`: 响应的 HTTP 状态码。
+  * `headers<Object>`: 响应的 HTTP Headers。
+  * `body<String>`: 响应的 HTTP Body，将以 UTF-8 编码后返回。
 
 使用 `$done();` 表示终止该请求，使用 `$done({});` 表示不对该请求进行修改。
 
