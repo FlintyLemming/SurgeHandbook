@@ -8,6 +8,7 @@ abc.com = 1.2.3.4
 *.dev = 6.7.8.9
 foo.com = bar.com
 bar.com = server:8.8.8.8
+baz.com = server:https://cloudflare-dns.com/dns-query
 ```
 
 ## 通配符

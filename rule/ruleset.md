@@ -50,7 +50,7 @@
 
     RULE-SET,LAN,DIRECT
 
-包括了 'local' 和其他本地 IP 地址。需要注意的是，这个规则集仍然会触发 DNS 查询。
+包括了 'local' 后缀和私有 IP 地址。**注意**：这个规则集会触发 DNS 查询。
 
     DOMAIN-SUFFIX,local
     IP-CIDR,192.168.0.0/16
@@ -58,6 +58,7 @@
     IP-CIDR,172.16.0.0/12
     IP-CIDR,127.0.0.0/8
     IP-CIDR,100.64.0.0/10
+    IP-CIDR6,fe80::/10
 
 ## External Ruleset
 

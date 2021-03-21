@@ -18,3 +18,8 @@
 
     IN-PORT,6152,DIRECT
 
+## PROTOCOL
+
+规则会匹配与协议参数相符合的请求。可选值：HTTP，HTTPS，TCP，UDP，DOH。
+
+    PROTOCOL,HTTP,DIRECT
