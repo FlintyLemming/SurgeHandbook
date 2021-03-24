@@ -44,16 +44,9 @@ JS Script 的执行效率极高，不必担心因使用脚本而带来性能问�
 
 ### 公共API
 
-* `console.log(message<String>)`  
-
-  输出到 Surge 日志
-
-* `setTimeout(function[, delay])`  
-
-  与浏览器的 setTimeout 方法一致
-
-* `$httpClient.post(URL<String> or options<Object>, callback<Function>)`  
-  发起一个 HTTP POST 请求。第一个参数可以是一个 URL 或参数表，参数表为。
+- `console.log(message<String>)` 输出到 Surge 日志
+- `setTimeout(function[, delay])` 与浏览器的 setTimeout 方法一致
+- `$httpClient.post(URL<String> or options<Object>, callback<Function>)` 发起一个 HTTP POST 请求。第一个参数可以是一个 URL 或参数表，参数表为。
 
   ```json
   {
@@ -72,18 +65,17 @@ JS Script 的执行效率极高，不必担心因使用脚本而带来性能问�
 
   其余类似的方法有：`$httpClient.get`，`$httpClient.put`，`$httpClient.delete`，`$httpClient.head`，`$httpClient.options`，`$httpClient.patch`。
 
-* `$notification.post(title<String>, subtitle<String>, body<String>)` 向通知中心发送通知，Surge iOS 上需开启通知总开关
-* `$utils.geoip(ip<String>)` 进行 GeoIP 查询，返回结果为 ISO 3166 的国家编码
-* `$surge.setSelectGroupPolicy(groupName<String>, policyName<String>)` 修改 select 策略组的当前选项，返回 bool 值表示是否成功
-* `$surge.selectGroupDetails()` 获得当前 select 策略组的信息，包含组名称，子策略，和当前选择的策略
-* `$surge.setOutboundMode(mode<String>)` mode 取值可为 "direct", "global-proxy", "rule"，修改 Surge 的 Outbound Mode，返回 bool 值表示是否成功
-* `$surge.setHTTPCaptureEnabled(enabled<Boolean>)`
-* `$surge.setCellularModeEnabled(enabled<Boolean>)`
-* `$surge.setRewriteEnabled(enabled<Boolean>)`
-* `$surge.setEnhancedModeEnabled(enabled<Boolean>)` 仅 Surge Mac 可用 以上四项，用于控制 Surge 的各项功能的开启
-* `$network` 当前网络状态的总览，包含 IP 和 SSID 等信息
-* `$script.name<String>` 当前执行的脚本的文件名
-* `$script.startTime<Date>` 当前执行的脚本的开始时间
-* `$persistentStore.write(data<String>, [key<String>])` 持久化保存数据，返回 bool 值表示是否成功，仅支持传入 string
-* `$persistentStore.read([key<String>])` 读取保存的持久化数据，返回 string 或 Null 不传入 key 时，同一个 script-path 的脚本共享一个存储池。可传入一个固定的 key 以在多个脚本间共享数据。
-
+- `$notification.post(title<String>, subtitle<String>, body<String>)` 向通知中心发送通知，Surge iOS 上需开启通知总开关
+- `$utils.geoip(ip<String>)` 进行 GeoIP 查询，返回结果为 ISO 3166 的国家编码
+- `$surge.setSelectGroupPolicy(groupName<String>, policyName<String>)` 修改 select 策略组的当前选项，返回 bool 值表示是否成功
+- `$surge.selectGroupDetails()` 获得当前 select 策略组的信息，包含组名称，子策略，和当前选择的策略
+- `$surge.setOutboundMode(mode<String>)` 修改 Surge 的出站模式，返回 bool 值表示是否成功，取值可为 "direct", "global-proxy", "rule"
+- `$surge.setHTTPCaptureEnabled(enabled<Boolean>)` 控制 Surge 的截获 HTTP 功能的开启
+- `$surge.setCellularModeEnabled(enabled<Boolean>)` 控制 Surge 的 CellularMode 的开启
+- `$surge.setRewriteEnabled(enabled<Boolean>)` 控制 Surge 的重写功能的开启
+- `$surge.setEnhancedModeEnabled(enabled<Boolean>)` 控制 Surge 的增强模式的开启 （仅 Surge Mac 可用）
+- `$network` 当前网络状态的总览，包含 IP 和 SSID 等信息
+- `$script.name<String>` 当前执行的脚本的文件名
+- `$script.startTime<Date>` 当前执行的脚本的开始时间
+- `$persistentStore.write(data<String>, [key<String>])` 持久化保存数据，返回 bool 值表示是否成功，仅支持传入 string
+- `$persistentStore.read([key<String>])` 读取保存的持久化数据，返回 string 或 Null 不传入 key 时，同一个 script-path 的脚本共享一个存储池。可传入一个固定的 key 以在多个脚本间共享数据。
