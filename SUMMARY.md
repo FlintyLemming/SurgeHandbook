@@ -27,7 +27,7 @@
 * [脚本](scripting/README.md)
   * [基础](scripting/common.md)
   * [HTTP 请求](scripting/http-request.md)
-  * [HTTP 返回](scripting/http-response.md)
+  * [HTTP 响应](scripting/http-response.md)
   * [脚本规则](scripting/rule.md)
   * [事件](scripting/event.md)
   * [DNS](scripting/dns.md)
@@ -43,4 +43,3 @@
   * [模块](others/module.md)
   * [DNS over HTTPS](others/doh.md)
   * [HTTP API](others/http-api.md)
-

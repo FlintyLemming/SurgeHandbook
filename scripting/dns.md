@@ -2,13 +2,13 @@
 
 使用脚本去执行 DNS 解析操作，该类型下第二参数为脚本名。
 
-```
-dns dnspod script-path=dnspod.js
+```text
+script = type=dns,script-path=dns.js,debug=true
 ```
 
 之后需要在 `[Host]` 中对相应域名进行配置。
 
-```
+```ini
 [Host]
 baidu.com = script:dnspod
 *.baidu.com = script:dnspod
@@ -27,7 +27,7 @@ baidu.com = script:dnspod
 
 以下样例使用了 DNSPod 的公开 HTTP DNS API，通过脚本扩展的方式让 Surge 可以随意支持各种协议的 DNS 查询
 
-```
+```javascript
 $httpClient.get('http://119.29.29.29/d?dn=' + $domain, function(error, response, data){
   if (error) {
     $done({}); // Fallback to standard DND query

@@ -18,7 +18,7 @@
 
 一个简单样例：
 
-```
+```javascript
 // script = type=cron,cronexp="* * * * *",script-path=cron.js
 $surge.setSelectGroupPolicy('Group', 'Proxy');
 $done();
