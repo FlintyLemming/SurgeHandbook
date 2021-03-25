@@ -70,10 +70,10 @@ JS Script 的执行效率极高，不必担心因使用脚本而带来性能问�
 - `$surge.setSelectGroupPolicy(groupName<String>, policyName<String>)` 修改 select 策略组的当前选项，返回 bool 值表示是否成功
 - `$surge.selectGroupDetails()` 获得当前 select 策略组的信息，包含组名称，子策略，和当前选择的策略
 - `$surge.setOutboundMode(mode<String>)` 修改 Surge 的出站模式，返回 bool 值表示是否成功，取值可为 "direct", "global-proxy", "rule"
-- `$surge.setHTTPCaptureEnabled(enabled<Boolean>)` 控制 Surge 的截获 HTTP 功能的开启
-- `$surge.setCellularModeEnabled(enabled<Boolean>)` 控制 Surge 的 CellularMode 的开启
-- `$surge.setRewriteEnabled(enabled<Boolean>)` 控制 Surge 的重写功能的开启
-- `$surge.setEnhancedModeEnabled(enabled<Boolean>)` 控制 Surge 的增强模式的开启 （仅 Surge Mac 可用）
+- `$surge.setHTTPCaptureEnabled(enabled<Boolean>)` 控制 Surge 截获 HTTP 功能的开启
+- `$surge.setCellularModeEnabled(enabled<Boolean>)` 控制 Surge 计费网络模式的开启
+- `$surge.setRewriteEnabled(enabled<Boolean>)` 控制 Surge 重写功能的开启
+- `$surge.setEnhancedModeEnabled(enabled<Boolean>)` 控制 Surge 增强模式的开启 （仅 Surge Mac 可用）
 - `$network` 当前网络状态的总览，包含 IP 和 SSID 等信息
 - `$script.name<String>` 当前执行的脚本的文件名
 - `$script.startTime<Date>` 当前执行的脚本的开始时间
