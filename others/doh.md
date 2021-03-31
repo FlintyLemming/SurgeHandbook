@@ -1,15 +1,22 @@
 # DNS over HTTPS
 
-## 为特定域名使用 DoH
+如果配置了 DNS-over-HTTPS，传统的 DNS 仅用于测试连接性和解析 DOH 地址里面的域名。
 
-像下面这样设置即可：
+## 为所有域名使用 DoH
+
+```
+[General]
+doh-server = https://9.9.9.9/dns-query
+```
+
+你可以指定多个 DNS-over-HTTPS 服务器（不推荐）。
+
+## 为特定域名使用 DoH
 
 ```text
 [Host]
 example.com = server:https://cloudflare-dns.com/dns-query
 ```
-
-## 为所有域名使用 DoH
 
 ## 如果直接使用 IP 地址
 
@@ -22,29 +29,30 @@ dns-server = https://9.9.9.9/dns-query
 
 你可以指定多个 DoH 服务器（并不建议），甚至和普通 DNS 服务器地址放在一起。但由于 DoH 返回结果一般比普通 DNS 慢，所以反而会在并发查询中被丢弃。
 
-## 如果要使用域名
+## DNS over HTTPS 格式
 
-这个情况就有点麻烦了，你必须像下面这样，先指定 IP 地址：
+对于 DoH 格式，有两种形式：JSON 和 DNS wireformat (RFC1035)。
 
-```text
+你需要确定你的 DoH 服务支持哪一种形式。
+
+* Surge iOS 4.1 和以下的版本 / Surge Mac 3.4.1 和以下的版本： 只支持 JSON 形式的文件。
+
+* Surge iOS 4.2 和以上的版本 / Surge Mac 3.5.0 和以上的版本： Surge 默认使用 DNS wireformat，你也可以继续使用 JSON 文件。
+
+    ```
+    [General]
+    doh-format=json
+    ```
+    
+## 通过代理使用 DoH
+
+如果你想通过代理使用 DoH，你可以打开 doh-follow-outbound-mode。
+
+```
 [General]
-dns-server = https://cloudflare-dns.com/dns-query
-
-[Host]
-cloudflare-dns.com = server:1.1.1.1
+doh-follow-outbound-mode=true
 ```
 
-## **DNS over HTTPS 格式**
+所有的 DoH 会走出站模式的设置，然后再编辑规则，让 DoH 的域名走代理。
 
-有两种 DoH 格式：JSON 和 DNS wireformat \(RFC1035\).
-
-你要确认清楚你的 DoH 服务商提供的是什么格式。
-
-* Surge iOS 4.1 和以下的版本、macOS 3.4.1 和以下的版本只支持 JSON 格式。
-* Surge iOS 4.2 和之后的版本、macOS 3.5.0 和之后的版本 Surge 默认使用 DNS wireformat 格式，你也可以像下面这样特别指定使用 JSON 格式。
-
-  ```text
-      [General]
-      doh-format=json
-  ```
-
+或者，使用 `PROTOCOL,DOH` 规则去匹配所有的 DoH 连接。
