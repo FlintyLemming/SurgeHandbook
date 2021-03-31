@@ -43,3 +43,5 @@
   * [模块](others/module.md)
   * [DNS over HTTPS](others/doh.md)
   * [HTTP API](others/http-api.md)
+* [更新日志](release-note/README.md)
+  * [Surge Mac](release-note/surge-mac.md)
