@@ -325,6 +325,30 @@ POST /v1/scripting/evaluate
 }
 ```
 
+## 设备管理（仅 Mac 4.0.6 以上版本可用）
+
+* GET /v1/devices
+
+获取当前激活和保存的设备列表。
+
+* GET /v1/devices/icon?id={iconID}
+
+获取设备的图标。你可以从 "device.dhcpDevice.icon" 中获取图标 ID。
+
+* POST /v1/devices
+
+改变设备的属性。`physicalAddress` 字段是必须的，可以从`name`、`address`、`shouldHandledBySurge` 中调整一个或多个属性。
+
+请求示例：
+
+```json
+{
+    "physicalAddress":"F0:9F:C2:00:00:00",
+    "name": "Computer",
+    "address": "192.168.1.200",
+    "shouldHandledBySurge": true
+}
+```
 ## 杂项
 
 * POST /v1/stop
