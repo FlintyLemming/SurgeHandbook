@@ -3,10 +3,10 @@
 ### **Version 4.1.0**
 
 #### **脚本**
-1. 你现在可以通过 UI 界面配置脚本了。
+你现在可以通过 UI 界面配置脚本了。
 
 #### **配置文件**
-1. 你现在可以把配置文件中的部分段落用单独的一个文件写。详情参考：https://surge.mitsea.com/overview/configuration。
+你现在可以把配置文件中的部分段落用单独的一个文件写。详情参考：https://surge.mitsea.com/overview/configuration。
 
 #### **HTTP API**
 1. 添加了关于配置文件的 HTTP API，包括 GET /profiles 和 POST /profiles/check。
@@ -15,7 +15,7 @@
 4. 你可以用 http-api-tls=true 来为 HTTP API 启用 TLS（HTTPS-API）。
 
 #### **自动化改进**
-1. 外部资源在 Surge 启动时就会更新，并且当应用一个配置文件时会自动下载其中引用的外部资源。
+外部资源在 Surge 启动时就会更新，并且当应用一个配置文件时会自动下载其中引用的外部资源。
 
 #### **其他改进**
 1. 新的规则类型：SUBNET，可以用通配符匹配 SSID、BSSID 和 路由IP地址。
@@ -26,7 +26,7 @@ https://dl.nssurge.com/mac/v4/Surge-4.1.0-1298-f07b1b8713b2397518f4b252b5786452.
 
 ### **Version 4.0.5**
 
-### **Policy Group**
+#### **Policy Group**
 
 In this release, we completely refactored the policy group functionality, bringing the following changes:
 
@@ -39,11 +39,11 @@ In this release, we completely refactored the policy group functionality, bringi
 5. When testing a group due to decision making, all sub-policies that the group may use are tested, including sub-policies of the sub-policy group.
 6. You may use no-alert=true parameter to suppress notifications for particular groups.
 
-### **Cloud Notification**
+#### **Cloud Notification**
 
 You can receive the notifications on iOS devices. Enable this option first and then configure it on Surge iOS. The two device must use a same iCloud account.
 
-### **Minor Changes**
+#### **Minor Changes**
 
 - Bug fixes.
 
@@ -101,7 +101,7 @@ You can receive the notifications on iOS devices. Enable this option first and t
 
 ### **Version 3.5.5**
 
-### **Minor Changes**
+#### **Minor Changes**
 
 - All URL resources now support URLs with a username and password (e.g. [https://user:pass@example.com](https://user:pass@example.com/)), including managed profile, external resources, and importing profile form URL.
 - You may switch among the main views with shortcut keys.
@@ -111,11 +111,11 @@ You can receive the notifications on iOS devices. Enable this option first and t
 
 ### **Version 3.5.4**
 
-### **Changes in Policy Group**
+#### **Changes in Policy Group**
 
 - New parameter: policy-regex-filter. If the parameter is configured, only matched policy line will be used.
 
-### **Minor Changes**
+#### **Minor Changes**
 
 - Provides more details for the TLS handshake error.
 - Increases the file description limitation alert threshold.
@@ -124,7 +124,7 @@ You can receive the notifications on iOS devices. Enable this option first and t
 
 ### **Version 3.5.3**
 
-### **New Parameter: use-local-host-item-for-proxy**
+#### **New Parameter: use-local-host-item-for-proxy**
 
 `[General]`
 
@@ -132,12 +132,12 @@ You can receive the notifications on iOS devices. Enable this option first and t
 
 If use-local-host-item-for-proxy is true, Surge sends the proxy request with the IP address defined in the [Host] section, instead of the original domain.
 
-### **Changes in Load Balance Group**
+#### **Changes in Load Balance Group**
 
 - load-balance group now supports connectivity testing before being used. Add 'url' parameter to enable it.
 - Parameters 'timeout', 'interval' and 'evaluate-before-use' are also available.
 
-### **Minor Changes**
+#### **Minor Changes**
 
 - Surge will send an ICMP port unreachable message if UDP forwarding fails.
 - Eliminate unnecessary local DNS lookup while forwarding UDP traffic to a proxy server.
@@ -147,17 +147,17 @@ If use-local-host-item-for-proxy is true, Surge sends the proxy request with the
 
 ### **Version 3.5.2**
 
-### **SSID Suspend**
+#### **SSID Suspend**
 
 - Surge Mac supports SSID suspend now. The system proxy and enhanced mode will be temporarily suspended under specified SSIDs.
 - The name of WiFi can be an SSID, a BSSID, or a gateway IP address.
 - No UI configuration in the current version.
 
-### **REJECT-DROP**
+#### **REJECT-DROP**
 
 - REJECT-DROP policy is now effective to proxy connections. The connections matched with a REJECT-DROP policy will be closed in 60-120s later without any data returned.
 
-### **Global Proxy**
+#### **Global Proxy**
 
 - You may now select and view sub-policy for policy groups while using the global proxy mode.
 
@@ -165,17 +165,17 @@ If use-local-host-item-for-proxy is true, Surge sends the proxy request with the
 
 ### **Version 3.5.1**
 
-### **New rule type: DOMAIN-SET**
+#### **New rule type: DOMAIN-SET**
 
 - DOMAIN-SET is just like RULE-SET. But it is designed a large number of rules and highly efficient.
 - Unlike RULE-SET, you can only write hostnames (domain or IP address) in it. One hostname per line.
 - You may use "." prefix to include all sub-domains.
 
-### **Changes in SRC-IP**
+#### **Changes in SRC-IP**
 
 - SRC-IP rule now supports IP-CIDR for both IPv4 and IPv6.
 
-### **Changes in DNS over HTTPS**
+#### **Changes in DNS over HTTPS**
 
 - From this version, if DNS-over-HTTPS is configured, the traditional DNS will only be used to test the connectivity and resolve the domain in the DOH URL.
 - The DNS over HTTPS now has a separate parameter: doh-server. The DOH servers in 'dns-server' will be moved to the new parameter after saving.
@@ -184,16 +184,16 @@ If use-local-host-item-for-proxy is true, Surge sends the proxy request with the
 - Added a new parameter 'doh-follow-outbound-mode'. In the previous version, the DOH client follows the system proxy settings. From this version, all DOH requests will use DIRECT policy by default. If 'doh-follow-outbound-mode' is set, the DOH requests will follow the outbound mode settings regardless of the system proxy settings.
 - We are refactoring the HTTP client for DOH and scripting. Please feedback if you encounter any issue.
 
-### **Changes in Scripting**
+#### **Changes in Scripting**
 
 - Added a simple view to test the script. You may find it in the Window menu.
 
-### **Minor Changes**
+#### **Minor Changes**
 
 - Fixed a crash in Dashboard while using search.
 - Bug fixes.
 
-### **Known Issues**
+#### **Known Issues**
 
 - You may not configure DOH with UI in this version temporarily.
 
