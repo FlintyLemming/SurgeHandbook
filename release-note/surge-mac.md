@@ -1,6 +1,28 @@
 # Surge Mac Release Note
 
-## **Surge Mac V4**
+### **Version 4.1.0**
+
+#### **脚本**
+1. 你现在可以通过 UI 界面配置脚本了。
+
+#### **配置文件**
+1. 你现在可以把配置文件中的部分段落用单独的一个文件写。详情参考：https://surge.mitsea.com/overview/configuration。
+
+#### **HTTP API**
+1. 添加了关于配置文件的 HTTP API，包括 GET /profiles 和 POST /profiles/check。
+2. 添加了关于设备管理的 HTTP API，包括 GET /devices、POST /devices 和 GET /devices/icon。
+3. HTTP API、代理服务、外部控制器（external controller）现在都支持监听 IPv6 地址了（UI 界面尚无，需要手动在配置文件里配置）。
+4. 你可以用 http-api-tls=true 来为 HTTP API 启用 TLS（HTTPS-API）。
+
+#### **自动化改进**
+1. 外部资源在 Surge 启动时就会更新，并且当应用一个配置文件时会自动下载其中引用的外部资源。
+
+#### **其他改进**
+1. 新的规则类型：SUBNET，可以用通配符匹配 SSID、BSSID 和 路由IP地址。
+2. 当处理大量请求的时候，Dashboard 性能有显著提升。
+
+#### **下载地址**
+https://dl.nssurge.com/mac/v4/Surge-4.1.0-1298-f07b1b8713b2397518f4b252b5786452.zip
 
 ### **Version 4.0.5**
 
