@@ -21,4 +21,4 @@ Surge 支持 6 中不同种类的规则：`DOMAIN`、`DOMAIN-SUFFIX`、`DOMAIN-K
     IP-CIDR,192.168.0.0/16,DIRECT
     FINAL,ProxyB
 
-DOMAIN、DOMAIN-SUFFIX 和 DOMAIN-KEYWORD 是[按域名判断的规则](https://surge-wiki.headto.icu/rule/domain-based)。 而 IP-CIDR 和 GEOIP 则是[按 IP 地址判断的规则](https://surge-wiki.headto.icu/rule/ip-based)。
+DOMAIN、DOMAIN-SUFFIX 和 DOMAIN-KEYWORD 是[按域名判断的规则](/rule/domain-based)。 而 IP-CIDR 和 GEOIP 则是[按 IP 地址判断的规则](/rule/ip-based)。
