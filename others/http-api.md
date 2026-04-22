@@ -1,122 +1,128 @@
-# HTTP API
+# HTTP API iOS 4.4.0+ Mac 4.0.0+
 
-
-* 仅Surge iOS 4.4.0 和 Surge Mac 4.0.0 以上版本支持通过 HTTP API 控制 Surge。
+你可以使用 HTTP API 来控制 Surge。
 
 ## 配置
 
-```conf
+```ini
 [General]
 http-api = examplekey@0.0.0.0:6171
+http-api-tls = false
 ```
 
 ## 身份验证
 
-API key 必须填写在所有请求的 'X-Key' 的 Header 中。
+所有请求的 'X-Key' 请求头中必须填入 API 密钥。
 
-```
+```http
 GET /v1/events
 X-Key: examplekey
 Accept: */*
 ```
 
-## 基本约束
+在某些特定情况下，如果不方便设置请求头，你也可以通过 URL 参数进行传递。例如，直接通过浏览器下载 CA 证书。
 
-当前版本仅支持未经 TLS 加密的 HTTP 请求。Surge 仅适用 GET 和 POST 方法。
+```
+http://127.0.0.1:6171/v1/mitm/ca?x-key=examplekey
+```
 
-* 对于 GET 请求，应适用 URL 发送参数。
-* 对于 POST 请求，应使用 JSON Body 发送参数。
+## HTTPS(TLS)
 
-Surge 总会返回 JSON Body 格式的响应。
+设置 `http-api-tls = true` 可以为 HTTP API 服务启用 HTTPS 支持。Surge 将使用 MITM 的 CA 证书为相应的访问地址生成服务器证书。
 
-## 路径
+## 基本限制
 
-### 切换开关功能
+目前仅支持不带 TLS 的 HTTP。Surge 仅使用 GET 和 POST 方法。
 
-* GET /v1/features/mitm
-* POST /v1/features/mitm
-* GET /v1/features/capture
-* POST /v1/features/capture
-* GET /v1/features/rewrite
-* POST /v1/features/rewrite
-* GET /v1/features/scripting
-* POST /v1/features/scripting
-* GET /v1/features/system_proxy （仅 Surge Mac 可用）
-* POST /v1/features/system_proxy （仅 Surge Mac 可用）
-* GET /v1/features/enhanced_mode （仅 Surge Mac 可用）
-* POST /v1/features/enhanced_mode （仅 Surge Mac 可用）
+*   对于 GET 方法，你应该使用 URL 参数发送参数。
+*   对于 POST 方法，你应该使用 JSON 请求体发送参数。
 
-使用 GET 方法获取开关的状态。
+Surge 将始终返回一个 JSON 请求体作为响应。
 
-GET 方法响应示例:
+## 路径 (Paths)
+
+### 切换功能状态 (Toggle capabilities)
+
+*   GET /v1/features/mitm
+*   POST /v1/features/mitm
+*   GET /v1/features/capture
+*   POST /v1/features/capture
+*   GET /v1/features/rewrite
+*   POST /v1/features/rewrite
+*   GET /v1/features/scripting
+*   POST /v1/features/scripting
+*   GET /v1/features/system\_proxy (仅限 Surge Mac)
+*   POST /v1/features/system\_proxy (仅限 Surge Mac)
+*   GET /v1/features/enhanced\_mode (仅限 Surge Mac)
+*   POST /v1/features/enhanced\_mode (仅限 Surge Mac)
+
+使用 GET 方法获取某个功能的状态。
+
+GET 响应示例：
 
 ```json
 {"enabled":true}
 ```
 
-适用 POST 请求调整开关状态。
+使用 POST 方法调整某个功能的状态。
 
-POST 方法请求示例:
+POST 请求示例：
 
 ```json
 {"enabled":true}
 ```
 
-## 出站模式
+### 出站模式 (Outbound Mode)
 
-* GET /v1/outbound
-* POST /v1/outbound
+*   GET /v1/outbound
+*   POST /v1/outbound
 
-适用 GET 请求 请求获取状态，适用 POST 请求修改。
+使用 GET 获取出站模式，使用 POST 更改它。
 
-GET 方法响应示例:
-
-```
-{"mode":"rule"}
-```
-
-适用 POST 请求调整开关状态。
-
-POST 方法请求示例:
+GET 响应示例：
 
 ```json
 {"mode":"rule"}
 ```
 
-模式的值可能为：direct, proxy, rule
+POST 请求示例：
 
-* GET /v1/outbound/global
-* POST /v1/outbound/global
+```json
+{"mode":"rule"}
+```
+
+可能的模式：direct, proxy, rule
+
+*   GET /v1/outbound/global
+*   POST /v1/outbound/global
 
 获取或更改全局出站模式的默认策略。
 
-GET 方法响应示例:
+GET 响应示例：
 
 ```json
 {"policy":"ProxyA"}
 ```
 
-适用 POST 请求调整开关状态。
-
-POST 方法请求示例:
+POST 请求示例：
 
 ```json
 {"policy":"ProxyB"}
 ```
 
-## 代理策略组
+### 代理策略 (Proxy Policy)
 
-* GET /v1/policies
+*   GET /v1/policies
 
-获取所有策略组。
+列出所有策略。
 
-* GET /v1/policies/detail?policy_name=ProxyNameHere
+*   GET /v1/policies/detail?policy\_name=ProxyNameHere
 
-获取代理的详细信息。
+获取策略的详细信息。
 
-* POST /v1/policies/test
+*   POST /v1/policies/test
 
-对策略组进行测速。
+使用 URL 测试策略。
 
 请求示例：
 
@@ -124,27 +130,27 @@ POST 方法请求示例:
 {"policy_names": ["ProxyA", "ProxyB"], "url": "http://bing.com"}
 ```
 
-* GET /v1/policy_groups
+*   GET /v1/policy\_groups
 
-列出所有的策略组和他们的选项。
+列出所有策略组及其选项。
 
-* GET /v1/policy_groups/test_results
+*   GET /v1/policy\_groups/test\_results
 
-获取 url-test/fallback/load-balance 组的测速结果。
+获取 url-test/fallback/load-balance 组的测试结果。
 
-* GET /v1/policy_groups/select?group_name=GroupNameHere
+*   GET /v1/policy\_groups/select?group\_name=GroupNameHere
 
-获取 select 组的选项。
+获取手动选择组 (select group) 的选项。
 
-请求示例：
+响应示例：
 
 ```json
 {"policy": "ProxyA"}
 ```
 
-* POST /v1/policy_groups/select
+*   POST /v1/policy\_groups/select
 
-改变 select 策略组的选项。
+更改手动选择组 (select group) 的选项。
 
 请求示例：
 
@@ -152,7 +158,7 @@ POST 方法请求示例:
 {"group_name": "GroupA", "policy": "ProxyA"}
 ```
 
-* POST /v1/policy_groups/test
+*   POST /v1/policy\_groups/test
 
 立即测试一个策略组。
 
@@ -166,45 +172,26 @@ POST 方法请求示例:
 
 ```json
 {
-    "results": [
-        {
-            "data": {
-                "ProxyA": {
-                    "tcp": 48,
-                    "rtt": 45,
-                    "receive": 273,
-                    "available": 213
-                },
-                "ProxyB": {
-                    "tcp": 48,
-                    "tfo": false,
-                    "receive": 164,
-                    "rtt": 51,
-                    "available": 48
-                },
-                "ProxyC": {}
-            },
-            "time": 1595510609.6405091
-        }
-    ],
-    "time": 1595510609.6405091,
-    "winner": "ProxyA"
+    "available": [
+        "ProxyA",
+        "ProxyB"
+    ]
 }
 ```
 
-## 请求
+### 请求 (Requests)
 
-* GET /v1/requests/recent
+*   GET /v1/requests/recent
 
-获取最近请求。
+列出最近的请求。
 
-* GET /v1/requests/active
+*   GET /v1/requests/active
 
-获取所有活动中的请求。
+列出所有活动的请求。
 
-* POST /v1/requests/kill
+*   POST /v1/requests/kill
 
-杀死一个请求。
+终止一个活动的请求。
 
 请求示例：
 
@@ -212,17 +199,17 @@ POST 方法请求示例:
 {"id": 100}
 ```
 
-## Profiles
+### 配置 (Profiles)
 
-* GET /v1/profiles/current?sensitive=0
+*   GET /v1/profiles/current?sensitive=0
 
-获取当前配置文件的内容。 如果"sensitive"为假，则所有密码字段都将被屏蔽。
+获取当前配置的文本内容。如果 'sensitive' 为 false，则所有密码字段都将被掩码隐藏。
 
-* POST /v1/profiles/reload
+*   POST /v1/profiles/reload
 
-立即重新载入配置文件。
+立即执行配置重新加载。
 
-* POST /v1/profiles/switch （仅 Surge Mac 可用）
+*   POST /v1/profiles/switch (仅限 Surge Mac)
 
 请求示例：
 
@@ -232,11 +219,11 @@ POST 方法请求示例:
 
 切换到另一个配置。
 
-* GET /v1/profiles （仅 Surge Mac 4.0.6 及以上版本可用）
+*   GET /v1/profiles (仅限 Mac 4.0.6+)
 
-获取可用的配置文件名。
+获取所有可用的配置名称。
 
-* POST /v1/profiles/check （仅 Surge Mac 4.0.6 及以上版本可用）
+*   POST /v1/profiles/check (仅限 Mac 4.0.6+)
 
 请求示例：
 
@@ -244,25 +231,27 @@ POST 方法请求示例:
 {"name": "Profile2"}
 ```
 
-检查配置。如果配置文件无效返回错误，否则 "error" 字段为空。
-## DNS
-* POST /v1/dns/flush
+检查配置。如果配置无效，将返回一个错误。否则 "error" 字段将为 null。
 
-刷新 DNS 缓存。
+### DNS
 
-* GET /v1/dns
+*   POST /v1/dns/flush
 
-获取当前 DNS 缓存内容。
+清除 DNS 缓存。
 
-* POST /v1/test/dns_delay
+*   GET /v1/dns
 
-测试 DNS 延时。
+获取当前的 DNS 缓存内容。
 
-## 模块
+*   POST /v1/test/dns\_delay
 
-* GET /v1/modules
+测试 DNS 延迟。
 
-获取可用和激活的模块。
+## 模块 (Modules)
+
+*   GET /v1/modules
+
+列出可用和启用的模块。
 
 响应示例：
 
@@ -280,9 +269,9 @@ POST 方法请求示例:
 }
 ```
 
-* POST /v1/modules
+*   POST /v1/modules
 
-启动或关闭模块
+启用或禁用模块。
 
 请求示例：
 
@@ -293,15 +282,15 @@ POST 方法请求示例:
 }
 ```
 
-## 脚本
+### 脚本 (Scripting)
 
-* GET /v1/scripting
+*   GET /v1/scripting
 
-获取脚本列表。
+列出所有脚本。
 
-POST /v1/scripting/evaluate
+*   POST /v1/scripting/evaluate
 
-适用 Mock 环境执行脚本。
+在模拟环境中执行脚本。
 
 请求示例：
 
@@ -313,31 +302,31 @@ POST /v1/scripting/evaluate
 }
 ```
 
-* POST /v1/scripting/cron/evaluate
+*   POST /v1/scripting/cron/evaluate
 
-立即执行一个定时脚本。
+立即执行一个 cron 脚本。
 
 请求示例：
 
 ```json
 {
-    "script_name": "script1",
+    "script_name": "script1"
 }
 ```
 
-## 设备管理（仅 Mac 4.0.6 以上版本可用）
+### 设备管理 (Device Management) (仅限 Mac 4.0.6+)
 
-* GET /v1/devices
+*   GET /v1/devices
 
-获取当前激活和保存的设备列表。
+获取当前活动的和已保存的设备列表。
 
-* GET /v1/devices/icon?id={iconID}
+*   GET /v1/devices/icon?id={iconID}
 
-获取设备的图标。你可以从 "device.dhcpDevice.icon" 中获取图标 ID。
+获取设备的图标。你可以从 `device.dhcpDevice.icon` 中获取 iconID。
 
-* POST /v1/devices
+*   POST /v1/devices
 
-改变设备的属性。`physicalAddress` 字段是必须的，可以从`name`、`address`、`shouldHandledBySurge` 中调整一个或多个属性。
+更改设备属性。`physicalAddress` 字段为必填。你可以调整 `name`、`address` 和 `shouldHandledBySurge` 中的一个或多个属性。
 
 请求示例：
 
@@ -349,30 +338,35 @@ POST /v1/scripting/evaluate
     "shouldHandledBySurge": true
 }
 ```
-## 杂项
 
-* POST /v1/stop
+### 杂项 (Misc)
 
-停止 Surge。若在 Surge iOS 上开启了 Always On 则会重启。
+*   POST /v1/stop
 
-* GET /v1/events
+关闭 Surge 引擎。如果在 Surge iOS 上启用了 Always On，Surge 引擎将会重新启动。
+
+*   GET /v1/events
 
 获取事件中心的内容。
 
-* GET /v1/rules
+*   GET /v1/rules
 
 获取规则列表。
 
-* GET /v1/traffic
+*   GET /v1/traffic
 
 获取流量信息。
 
-* POST /v1/log/level
+*   POST /v1/log/level
 
-修改当前会话的日志等级。
+更改当前会话的日志级别。
 
 请求示例：
 
 ```json
 {"level": "verbose"}
 ```
+
+*   GET /v1/mitm/ca
+
+获取 MITM 的 CA 证书，采用 DER 二进制格式。（仅包含证书，不包含私钥）

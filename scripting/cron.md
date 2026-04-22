@@ -1,25 +1,28 @@
-# 计划任务
+### 计划任务 (cron)
 
-在指定时间执行 cron 脚本。cronexp 应该是一个 cron 表达式，它是一个由五个或六个子表达式（字段）组成的字符串，描述了计划的各个细节。
+在指定的时间执行脚本。该值应为 cron 表达式，这是一个由五或六个子表达式（字段）组成的字符串，用于描述排程的具体细节。
 
-> 译者按：Surge 兼容五位和六位的表示方法。
+一些 cron 表达式示例：
 
-一些 cron 表达式的样例如下：
+*   每天凌晨 2 点: `0 2 * * *`
+*   每天早上 5 点和下午 5 点: `0 5,17 * * *`
+*   每分钟: `* * * * *`
+*   每秒: `* * * * * *`
+*   每个星期日下午 5 点: `0 17 * * sun`
+*   每 10 分钟: `*/10 * * * *`
 
-* at 2am daily: `0 2 * * *`
-* at 5 AM and 5 PM daily: `0 5,17 * * *`
-* on every minutes: `* * * * *`
-* on every Sunday at 5 PM: `0 17 * * sun`
-* every 10 minutes: `*/10 * * * *`
+只有一个传入参数：`$cronexp`。
 
-只有一个传入参数： `$cronexp`。
+请调用 `$done()` 以完成执行。
 
-脚本任务执行完毕后请调用 `$done()` 退出。
-
-一个简单样例：
+一个简单的例子：
 
 ```javascript
-// script = type=cron,cronexp="* * * * *",script-path=cron.js
+// cron "0 2 * * *" script-path=cron.js
 $surge.setSelectGroupPolicy('Group', 'Proxy');
 $done();
 ```
+
+### 附加 API (Additional API)
+
+*   `$cronexp`: cron 表达式字符串。

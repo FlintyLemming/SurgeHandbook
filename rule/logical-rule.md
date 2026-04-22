@@ -1,34 +1,43 @@
-# 逻辑规则
+# 逻辑规则 (Logical Rule)
 
-需要复杂条件时，可以用逻辑运算符去组合多个规则。并且逻辑规则是可以相互嵌套的。U
+使用逻辑操作符规则将多个规则组合起来以应对复杂场景。你可以将逻辑规则嵌套在另一个逻辑规则中。
 
-## AND 规则
+#### AND 规则
 
-当所含规则全部匹配时，会被触发
+如果所有子规则都匹配，则触发该规则。
 
-    AND,((#Rule1), (#Rule2), (#Rule3)...),Policy
+```ini
+AND,((#Rule1), (#Rule2), (#Rule3)...),Policy
+```
 
-例子：
+示例：
 
-    AND,((SRC-IP,192.168.1.110), (DOMAIN, example.com)),DIRECT
+```ini
+AND,((SRC-IP,192.168.1.110), (DOMAIN, example.com)),DIRECT
+```
 
-## OR 规则
+#### OR 规则
 
-当所含的任意一个规则匹配时，会被触发
+如果任意子规则匹配，则触发该规则。
 
-    OR,((#Rule1), (#Rule2), (#Rule3)...),Policy
+`OR,((#Rule1), (#Rule2), (#Rule3)...),Policy`
 
-例子：
+示例：
 
-    OR,((SRC-IP,192.168.1.110), (SRC-IP,192.168.1.111)),DIRECT
+```ini
+OR,((SRC-IP,192.168.1.110), (SRC-IP,192.168.1.111)),DIRECT
+```
 
-## NOT 规则
+#### NOT 规则
 
-当不符合所含规则时，会被触发
+反转原始规则的评估结果。
 
-    NOT,((#Rule1)),Policy
+```ini
+NOT,((#Rule1)),Policy
+```
 
-例子：
+示例：
 
-    AND,((NOT,((SRC-IP,192.168.1.110))),(DOMAIN, example.com)),DIRECT
-
+```ini
+AND,((NOT,((SRC-IP,192.168.1.110))),(DOMAIN, example.com)),DIRECT
+```

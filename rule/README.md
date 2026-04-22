@@ -1,24 +1,32 @@
-# 规则
+# 规则 (Rule)
 
-Surge 可以根据自定义规则，决定将请求转发给代理服务器，还是直接发送给原始服务器。
+Surge 可以根据自定义规则将请求转发到另一个代理服务器，或直接连接到主机。
 
-### 优先度
+### 优先级 (Priority)
 
-规则按照配置文件里的顺序，按照从头到尾的顺序进行匹配。换句话说，第一条规则的优先级最高。
+规则从第一条到最后一条按顺序匹配，顺序即它们在配置文件中出现的顺序。换句话说，列表顶部的规则比后面的规则具有更高的优先级。
 
-### 编辑规则
+### 组成部分 (Composition)
 
-每一条规则由三部分组成：规则类型、匹配的流量（FINAL 规则没有这一项）以及所采取的策略。即：`TYPR,VALUE,POLICY`。比如：`DOMAIN-SUFFIX,apple.com,DIRECT` `IP-CIDR,192.168.0.0/16,ProxyA`。
+每条规则由 3 部分组成：规则类型、匹配器（FINAL 规则除外）和代理策略：
 
-Surge 支持 6 中不同种类的规则：`DOMAIN`、`DOMAIN-SUFFIX`、`DOMAIN-KEYWORD`、`GEOIP`、`IP-CIDR` 和 `FINAL`。对于所采取的策略，可以是一个代理服务器，也可以是一个策略组，或者是内置的`DIRECT`和`REJECT`。不管使用什么样的规则、写了多少条规则，都必须要以一个`FINAL`规则结束，作为对所写规则以外情况的判断。
+```ini
+           类型(TYPE),  值(VALUE),       策略(POLICY)
+例如:       DOMAIN-SUFFIX,apple.com,     DIRECT
+           IP-CIDR,      192.168.0.0/16,ProxyA
+```
 
-例子：
+Surge 支持多种类型的规则，请参阅此类别下特定规则的介绍。策略可以是内置策略、代理策略或策略组。有关详细信息，请参阅策略部分的说明。规则列表必须以一条 `FINAL` 规则结尾，以定义默认行为。
 
-    [Rule]
-    DOMAIN-SUFFIX,company.com,ProxyA
-    DOMAIN-KEYWORD,google,DIRECT
-    GEOIP,US,DIRECT
-    IP-CIDR,192.168.0.0/16,DIRECT
-    FINAL,ProxyB
+示例：
 
-DOMAIN、DOMAIN-SUFFIX 和 DOMAIN-KEYWORD 是[按域名判断的规则](/rule/domain-based)。 而 IP-CIDR 和 GEOIP 则是[按 IP 地址判断的规则](/rule/ip-based)。
+```ini
+[Rule]
+DOMAIN-SUFFIX,company.com,ProxyA
+DOMAIN-KEYWORD,google,DIRECT
+GEOIP,US,DIRECT
+IP-CIDR,192.168.0.0/16,DIRECT
+FINAL,ProxyB
+```
+
+`DOMAIN`、`DOMAIN-SUFFIX` 和 `DOMAIN-KEYWORD` 属于基于域名的规则 (domain based rules)。`IP-CIDR` 和 `GEOIP` 属于基于 IP 的规则 (IP based rules)。

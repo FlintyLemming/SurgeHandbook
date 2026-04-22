@@ -1,36 +1,51 @@
-# 根据 IP 地址匹配的规则
+# 基于 IP 的规则 (IP-based Rule)
 
-有两个根据 IP 匹配的规则。如果请求的主机名是一个域名，那么根据 IP 的规则将触发 DNS 查询。如果 DNS 查询失败，Surge 会停止规则测试并报错。
+共有 3 种基于 IP 的规则类型。如果请求的主机名是域名，基于 IP 的规则将触发 DNS 查询。如果 DNS 查询失败，Surge 将中止规则测试并报告错误。
 
-### IP-CIDR
+#### IP-CIDR
 
-    IP-CIDR,192.168.0.0/16,DIRECT
-    IP-CIDR,10.0.0.0/8,DIRECT
-    IP-CIDR,172.16.0.0/12,DIRECT
-    IP-CIDR,127.0.0.1/8,DIRECT
+```ini
+IP-CIDR,192.168.0.0/16,DIRECT
+IP-CIDR,10.0.0.0/8,DIRECT
+IP-CIDR,172.16.0.0/12,DIRECT
+IP-CIDR,127.0.0.1/8,DIRECT
+```
 
-规则会匹配规则范围内请求的 IP 地址
+如果请求的 IP 地址匹配指定的范围，则触发该规则。
 
-### IP-CIDR6
+从 Surge Mac 6.0.0 开始，你也可以提供一个不带 `/` 掩码的单一 IPv4 地址，它将被视为 `/32`。
 
-    IP-CIDR6,2001:db8:abce:8000::/50,DIRECT
+#### IP-CIDR6
 
-规则会匹配规则范围内请求的 IPv6 地址
+```ini
+IP-CIDR6,2001:db8:abcd:8000::/50,DIRECT
+```
 
-### GEOIP
+如果请求的 IPv6 地址匹配指定的范围，则触发该规则。
 
-    GEOIP,US,DIRECT
+也支持单一 IPv6 地址——例如，写入 `IP-CIDR6,2404:6800::` 等同于 `/128`。
 
-规则会匹配相应国家和地区的 IP 地址
+#### GEOIP
 
-## 根据 IP 判断的规则的可选项
+`GEOIP,US,DIRECT`
 
-### 选项: no-resolve
+如果 GeoIP 测试结果匹配指定的国家/地区代码，则触发该规则。
 
-    GEOIP,US,DIRECT,no-resolve
-    IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
+#### IP-ASN
 
-当 GEOIP 或者 IP-CIDR 规则被触发，Surge 会发送一个解析请求去检查主机名是否为一个域名。你可以加上 “no-resolve” 以跳过这个过程。
+`IP-ASN,1234,DIRECT`
 
-> 请注意: 如果本地 DNS 服务器无法解析某些域名，请确保在这个规则前没有基于 IP 的规则会匹配到这个域名。否则，由于 DNS 解析错误，规则测试将失败。你可以用“no-resolve”来解决这个问题。
+如果远程 IP 地址的自治系统编号 (ASN) 匹配，则触发该规则。
 
+### 基于 IP 的规则参数
+
+#### no-resolve
+
+```ini
+GEOIP,US,DIRECT,no-resolve
+IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
+```
+
+当遇到 `GEOIP` 或 `IP-CIDR` 规则时，Surge 将发送 DNS 查询以检查请求的主机名是否为域名。你可以选择 `no-resolve` 选项，让带有域名的请求跳过该规则。
+
+> 注意：如果某些域名无法被本地 DNS 服务器解析，请确保在匹配该域名的规则之前没有基于 IP 的规则。否则，规则测试将由于 DNS 错误而失败。你也可以使用 `no-resolve` 来解决此问题。

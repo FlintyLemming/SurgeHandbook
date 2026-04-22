@@ -1,22 +1,19 @@
 # 组件
 
-Surge 由几个组件构成
+Surge 包含几个组件。
 
-## Surge Proxy Server
+### Surge 代理服务器
 
-这是 Surge 最核心的部分，由于使用 Objective-C 编写，并对 macOS 和 iOS 分别进行了优化，所以可以高效且稳定地作为 HTTP/SOCKS5 代理服务器处理所有请求。
+这是 Surge 的核心部分。它是一个全功能的 HTTP/SOCKS5 代理服务器，具有极高的性能和稳定性，使用 Objective-C 编写，并针对 macOS 和 iOS 进行了优化。
 
-## Surge Virtual Network Interface \(Surge VIF\)
+### Surge 虚拟网卡 (Surge VIF)
 
-有些应用不遵从系统代理设置（比如邮件），因为他们需要使用原生 TCP socket。Surge VIF 可以处理这些流量。
+一些应用不遵循系统代理设置（如 Mail.app），因为它们需要使用原始 TCP 套接字。这类流量可以由 Surge VIF 处理。
 
-在 iOS 种，这项功能是默认被开启的；而在 macOS 中，可以通过打开 增强模式 使用该功能。
+Surge VIF 在 Surge iOS 上默认启用。你可以通过打开增强模式在 Surge Mac 上启用 Surge VIF。
 
-以下是 Surge iOS 版的结构：
+这是 Surge iOS 的架构：![](../assets/Surge-Architecture.png)
 
-![](https://manual.nssurge.com/Surge-Architecture.png)
+### Surge Dashboard (仅限 Mac 版)
 
-## Surge Dashboard （macOS 版独有功能）
-
-Surge Dashboard（在新版被译为“请求查看器”）是一个用于查看请求和 DNS 缓存的图形化界面。当开启远程访问时（设置 - 通用 - 远程 Dashboard），可以通过其他设备查看该设备的 Dashboard 信息。
-
+Surge Dashboard 是一个图形用户界面，用于审查和检查请求，并列出 DNS 缓存。它可以连接到本地 Surge 实例，或者在配置了外部控制器访问权限时连接到远程实例。

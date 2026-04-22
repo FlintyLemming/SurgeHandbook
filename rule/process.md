@@ -1,12 +1,13 @@
-# 进程规则
+# 进程规则 (Process Rule)
 
-你可以写能够匹配软件进程的规则，该规则只在 Surge macOS 版生效，iOS 版会自动忽略这个类型的规则。
+你可以为指定的进程分配策略。进程规则仅适用于 Surge Mac，Surge iOS 会忽略这些规则。
 
-## PROCESS-NAME
+#### PROCESS-NAME (仅限 Mac)
 
-    PROCESS-NAME,Telegram,Proxy
+```ini
+PROCESS-NAME,Telegram,Proxy
+```
 
-规则会匹配这个进程名的程序，支持 `*` 和 `?` 两种通配符。
+如果请求的进程名称匹配，则触发该规则。支持通配符 `*` 和 `?`。
 
-> 你也可以把该进程名的所在目录写清楚。至于如何找到这个名称，对于 macOS 软件包，一般在 .app/Contents/MacOS 位置下
-
+> 你可以指定可执行文件的文件名或完整路径。对于 macOS 应用程序包，它位于 `.app/Contents/MacOS` 路径下。

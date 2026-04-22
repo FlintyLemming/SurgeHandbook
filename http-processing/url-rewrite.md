@@ -1,46 +1,43 @@
-# 重写 URL
+# URL 重写 (URL Rewrite)
 
-Surge 可以通过两种方式来重写请求的 URL，或者根据 URL 拒绝特定的请求。
+Surge 可以使用 2 种不同的方法重写请求的 URL，或者根据 URL 拒绝某些请求。
 
-例子：
+示例：
 
-```text
+```ini
 [URL Rewrite]
 ^http://www\.google\.cn http://www.google.com header
 ^http://yachen\.com https://yach.me 302
-^http://ad\.com/ad\.png - reject
+^http://ad\.com/ad\.png _ reject
 ```
 
-一条重写规则由 3 部分组成：正则表达式、替换的内容和类型。
+重写规则由三个部分组成：正则表达式、替换内容和类型。
 
-## 重写请求头的域名
+### Header 模式
 
-Surge 能重写请求头的域名，指向一个新的地址发送请求。发送请求的客户端不会发现这个操作。
+Surge 会修改请求头，并在必要时将请求重定向到另一个主机。客户端不会感知到这个重写操作。
 
-例子：
+请求头中的 `Host` 字段将被修改以匹配新的 URL。
 
-```text
+```ini
 [URL Rewrite]
 ^http://www\.google\.cn http://www.google.com header
 ```
 
-> 不能使用 HTTPS Scheme 重定向。而且也不能重定向 HTTPS 请求。
+### 302 模式
 
-## **302 重定向**
+Surge 将直接返回一个 302 重定向响应。如果为主机名启用了 MitM，HTTPS 请求也可以被重定向。
 
-Surge 会直接返回一个 302 重定向的响应。如果启用了 MitM，并将域名添加到了解密列表，那么这个方法可以使用 HTTPS。
-
-```text
+```ini
 [URL Rewrite]
 ^http://yachen\.com https://yach.me 302
 ```
 
-## 拒绝请求
+### Reject 模式
 
-拒绝符合正则表达式的请求。这种就不用写替换的内容了。如果启用了 MitM，并将域名添加到了解密列表，那么这个方法可以使用 HTTPS。
+如果模式匹配，则拒绝该请求。替换参数将被忽略。如果为主机名启用了 MitM，HTTPS 请求将被拒绝。
 
-```text
+```ini
 [URL Rewrite]
-^http://ad\.com/ad\.png - reject
+^http://ad\.com/ad\.png _ reject
 ```
-

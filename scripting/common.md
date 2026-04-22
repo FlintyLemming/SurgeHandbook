@@ -1,83 +1,232 @@
-# 基础
+*脚本功能需要 Surge iOS 4 或 Surge Mac 3.3.0*
 
-脚本需要 Surge iOS 4 或 Surge Mac 3.3.0 以上版本
+# 脚本 (Scripting)
 
-## 脚本
+你可以使用 JavaScript 按照你的意愿扩展 Surge 的能力。
 
-使用 JavaScript 随心所欲的拓展 Surge 功能。
-
-### 脚本字段
+## 脚本段落 (Script Section)
 
 ```ini
 [Script]
-script1 = type=http-response,pattern=^http://www.example.com/test script-path=test.js,max-size=16384,debug=true
+script1 = type=http-response,pattern=^http://www.example.com/test,script-path=test.js,max-size=16384,debug=true
 script2 = type=cron,cronexp="* * * * *",script-path=fired.js
-script3 = type=http-request,pattern=^http://httpbin.org script-path=http-request.js,max-size=16384,debug=true,requires-body=true
+script3 = type=http-request,pattern=^http://httpbin.org,script-path=http-request.js,max-size=16384,debug=true,requires-body=true
 script4 = type=dns,script-path=dns.js,debug=true
-script5 = type=event,event-name=network-changed,control-api=1,script-path=event.js
 ```
 
-每一行都有两个组成部分：脚本名称、参数。常见的参数：
+每一行包含两个组成部分：脚本名称和参数。公共参数：
 
-- type：脚本的类型，可选值：http-request, http-response, cron, event, dns, rule.
-- script-path：脚本的路径，可以是相对路径、绝对路径或者 URL。
-- script-update-interval：当脚本路径为 URL 时的自动更新频率，单位为秒。
-- debug：开启 debug 模式，如果是一个本地脚本，那么每次执行脚本时，都会从本地存储重新加载脚本，方便调试。
-- control-api：允许脚本内使用 `$surge` 变量，控制 Surge。
-- timeout：脚本的最长运行时间，默认为 10s。
+*   `type`: 脚本的类型：`http-request`、`http-response`、`cron`、`event`、`dns`、`rule`、`generic`。
+*   `script-path`: 脚本的路径，可以是相对于配置文件的相对路径、绝对路径或 URL。
+*   `script-update-interval`: 当为 script-path 使用 URL 时的更新间隔，单位为秒。
+*   `debug`: 开启调试模式，具有以下效果：
+    1.  每次执行脚本前，都会从文件系统重新加载脚本。（仅限 Surge Mac）
+    2.  对于 `http-request` 和 `http-response` 脚本，当你使用 `console.log()` 输出日志时，这些消息也会显示在请求的注释 (notes) 中。
+*   `timeout`: 脚本的最长运行时间。默认值为 5 秒。
+*   `argument`: 脚本可以通过 `$argument` 获取该值。
+*   `engine`: 参见本文后半部分。
 
-http-request/http-response 类型脚本的可用参数：
+`http-request` 和 `http-response` 的参数：
 
-- pattern：匹配URL的正则。
-- requires-body：表示该脚本需要对 body 进行处理，默认为 false。如果只需要修改 URL 或者 Headers 请不要开启该选项，将大幅节约资源。
-- max-size：表示该脚本最大允许处理的 body 大小，若超过则放弃处理，默认值为 131072 （128KB）。
+*   `pattern`: 用于匹配 URL 的正则表达式。
+*   `requires-body`: 允许脚本修改请求/响应体。默认值为 false。此行为开销很大。仅在必要时开启。
+*   `max-size`: 允许的请求/响应体的最大大小。默认值为 131072 (128KB)。
+*   `binary-body-mode`: 仅在 iOS 15 和 macOS 中可用。原始二进制数据将以 `Uint8Array` 而不是字符串值的形式传递给脚本。
 
-由于进行脚本修改会需要 Surge 先将 response body 完全下载后再进行处理，如果遇到了较大的数据将导致内存占用量暴增，Surge iOS 受系统内存限制在该情况下极易被直接终止。所以请务必仔细配置 URL 匹配规则，仅对需要的 URL 进行处理。
+脚本功能要求 Surge 将整个响应体数据加载到内存中。巨大的响应体可能会导致 Surge iOS 崩溃，因为 iOS 系统限制了 Network Extension 可以占用的最大内存量。
 
-当返回的数据长度超过 max-size 设定值后，Surge 将放弃对该请求执行脚本并回退到 passthrough 模式。
+请仅为必要的 URL 启用脚本。
 
-### 基本定义
+如果响应体大小超过 `max-size` 的值，Surge 将回退到直通 (passthrough) 模式，并跳过对该请求的脚本处理。
 
-所有脚本允许异步操作，使用 `$done(value<Object>)` 方法表示完成并返回相应结果。即使是不要求返回结果的脚本类型也应当在完成任务后调用 `$done()` 退出，否则脚本会因为超时而产生警告。
+## 基本限制 (Basic Constraints)
 
-### 性能
+脚本允许异步操作。应该调用 `$done(value)` 来表示完成，即使对于不需要结果的脚本也是如此。否则，脚本会因为超时而收到警告。
 
-JS Script 的执行效率极高，不必担心因使用脚本而带来性能问题（Body 修改类除外，会影响整体逻辑），在我们的测试环境下，一个简单脚本的完整执行仅耗时 0.2ms。
+## 性能 (Performances)
 
-### 公共API
+你无需担心脚本的性能。JavaScript 核心非常高效。
 
-- `console.log(message<String>)` 输出到 Surge 日志
-- `setTimeout(function[, delay])` 与浏览器的 setTimeout 方法一致
-- `$httpClient.post(URL<String> or options<Object>, callback<Function>)` 发起一个 HTTP POST 请求。第一个参数可以是一个 URL 或参数表，参数表为。
+## 公共 API (Public API)
 
-  ```json
-  {
-    url："http://www.example.com/",
-      headers：{
-        Content-Type："application/json"
-      },
-    body："{}"
-  }
-  ```
+### 基本信息
 
-  当使用参数表时，`url` 参数必选，其余选填，`header` 字段存在会覆盖默认的所有 Header。`body` 可以是 string 或 object。当为 object 时，将自动进行 JSON 编码，并设置 'Content-Type' 为 'application/json'。
+*   **`$network`**
 
-  callback 定义为`callback(error<String>, response<Object>, data<String>)`  
-  error 为 Null 表示请求成功，response 包含 status 和 headers 两个字段。
+该对象包含网络环境的详细信息。
 
-  其余类似的方法有：`$httpClient.get`，`$httpClient.put`，`$httpClient.delete`，`$httpClient.head`，`$httpClient.options`，`$httpClient.patch`。
+*   **`$script`**
 
-- `$notification.post(title<String>, subtitle<String>, body<String>)` 向通知中心发送通知，Surge iOS 上需开启通知总开关
-- `$utils.geoip(ip<String>)` 进行 GeoIP 查询，返回结果为 ISO 3166 的国家编码
-- `$surge.setSelectGroupPolicy(groupName<String>, policyName<String>)` 修改 select 策略组的当前选项，返回 bool 值表示是否成功
-- `$surge.selectGroupDetails()` 获得当前 select 策略组的信息，包含组名称，子策略，和当前选择的策略
-- `$surge.setOutboundMode(mode<String>)` 修改 Surge 的出站模式，返回 bool 值表示是否成功，取值可为 "direct", "global-proxy", "rule"
-- `$surge.setHTTPCaptureEnabled(enabled<Boolean>)` 控制 Surge 截获 HTTP 功能的开启
-- `$surge.setCellularModeEnabled(enabled<Boolean>)` 控制 Surge 计费网络模式的开启
-- `$surge.setRewriteEnabled(enabled<Boolean>)` 控制 Surge 重写功能的开启
-- `$surge.setEnhancedModeEnabled(enabled<Boolean>)` 控制 Surge 增强模式的开启 （仅 Surge Mac 可用）
-- `$network` 当前网络状态的总览，包含 IP 和 SSID 等信息
-- `$script.name<String>` 当前执行的脚本的文件名
-- `$script.startTime<Date>` 当前执行的脚本的开始时间
-- `$persistentStore.write(data<String>, [key<String>])` 持久化保存数据，返回 bool 值表示是否成功，仅支持传入 string
-- `$persistentStore.read([key<String>])` 读取保存的持久化数据，返回 string 或 Null 不传入 key 时，同一个 script-path 的脚本共享一个存储池。可传入一个固定的 key 以在多个脚本间共享数据。
+    *   `$script.name<String>`: 正在执行的脚本名称。
+    *   `$script.startTime<Date>`: 当前脚本开始的时间。
+    *   `$script.type<String>`: 当前脚本的类型。
+*   **`$environment`**
+
+    *   `$environment.system<String>`: iOS 或 macOS。
+    *   `$environment.surge-build<String>`: Surge 的构建号。
+    *   `$environment.surge-version<String>`: Surge 的简短版本号。
+    *   `$environment.language<String>`: 当前 Surge 的 UI 语言。
+    *   `$environment.device-model<String>`: 当前设备型号。iOS 5.9.0+ Mac 5.5.0+
+
+### 持久化存储 (Persistent Store)
+
+*   **`$persistentStore.write(data<String>, [key<String>])`**
+
+永久保存数据。只允许字符串。如果成功则返回 true。
+
+*   **`$persistentStore.read([key<String>])`**
+
+获取保存的数据。返回字符串或 Null。
+
+如果 key 为 undefined，具有相同 script-path 的脚本将共享存储池。使用 key 可以在不同脚本之间共享数据。
+
+提示：Surge Mac 将 `$persistentStore` 数据写入目录 `~/Library/Application Support/com.nssurge.surge-mac/SGJSVMPersistentStore/`。你可以直接在此处编辑文件以进行调试。
+
+### 控制 Surge
+
+*   **`$httpAPI(method<String>, path<String>, body<Object>, callback<Function>(result<Object>))`**
+
+你可以使用 `$httpAPI` 调用所有的 HTTP API 来控制 Surge 的功能。不需要身份验证参数。请参阅 HTTP API 部分以了解可用功能。
+
+### $httpClient
+
+*   **`$httpClient.post(URL<String> 或 options<Object>, callback<Function>)`**
+
+发起 HTTP POST 请求。第一个参数可以是 URL 或选项对象。选项对象示例如下：
+
+```json
+{
+  url: "http://www.example.com/",
+  headers: {
+    Content-Type: "application/json"
+    },
+  body: "{}",
+  timeout: 5
+}
+```
+
+当使用对象作为选项列表时，`url` 是必需的。如果存在 `headers` 字段，它将覆盖所有现有的标头字段。`body` 可以是字符串或对象。如果提供的是对象，它将被编码为 JSON 字符串，并且 'Content-Type' 将设置为 `application/json`。
+
+#### callback
+
+callback: `callback(error, response, data)`
+
+成功时，error 为 null，response 对象包含 `status` 和 `headers` 属性。
+
+相似函数：**`$httpClient.get`**, **`$httpClient.put`**, **`$httpClient.delete`**, **`$httpClient.head`**, **`$httpClient.options`**, **`$httpClient.patch`**。
+
+#### 选项 (Options)
+
+*   `timeout`: 默认超时时间为 5 秒。你可以使用此选项覆盖它。
+*   `insecure`: 如果将此选项设置为 true，https 请求将不验证服务器证书。iOS 5.9.0+ Mac 5.5.0+
+*   `auto-cookie`: 控制是否自动处理 Cookie 相关字段并存储，默认启用。如果关闭，Cookie 标头将作为普通字段传递。iOS 5.9.0+ Mac 5.5.0+
+*   `auto-redirect`: 控制当遇到 30x HTTP 状态码时是否自动重定向请求，默认启用。iOS 5.9.0+ Mac 5.5.0+
+
+##### 策略 (Policy)
+
+你可以指定一个策略来执行请求：
+
+*   `policy`: 使用现有的策略名称。
+*   `policy-descriptor`: 使用带有完整描述符的临时策略。
+
+#### 二进制数据 (Binary Data) iOS 5.4.1+ Mac 5.0.1+
+
+你可以将 `TypedArray` 对象作为 body 传递。
+
+此外，你可以使用 `binary-mode` 参数让 Surge 以 `TypedArray` 而不是字符串形式返回响应数据。
+
+```json
+{
+  url: "http://www.example.com/",
+  binary-mode: true
+}
+```
+
+### 实用工具 (Utilities)
+
+*   **`console.log(message<String>)`**
+
+打印到 Surge 日志文件。
+
+*   **`setTimeout(function[, delay])`**
+
+与浏览器中的 setTimeout 相同。
+
+*   **`$utils.geoip(ip<String>)`**
+
+执行 GeoIP 查询。结果采用 ISO 3166 代码。
+
+*   **`$utils.ipasn(ip<String>)`**
+
+查找 IP 地址的 ASN。
+
+*   **`$utils.ipaso(ip<String>)`**
+
+查找 IP 地址的 ASO。
+
+*   **`$utils.ungzip(binary<Uint8Array>)`**
+
+解压 gzip 数据。结果也是一个 `Uint8Array`。
+
+*   **`$notification.post(title<String>, subtitle<String>, body<String>[, options<Object>])`**
+
+发送通知。
+
+可用选项：iOS 5.11.0+ Mac 5.7.0+
+
+*   `action`: 点击通知打开 Surge 后的操作。
+
+    *   `open-url`: 打开一个 URL，特定的 URL 由 `url` 参数提供。
+    *   `clipboard`: 复制内容到剪贴板（需要用户确认），内容通过 `text` 参数提供。
+
+*   `media-url`: 为通知提供媒体内容，例如图片。内容应该是一个有效的 URL。
+*   `media-base64`: 功能同上，但内容直接通过 base64 提供。需要通过 `media-base64-mime` 参数提供内容的 MIME 类型。
+*   `auto-dismiss`: 布尔值，指示是否在一段时间（通常是 10 秒）后自动关闭通知。
+*   `sound`: 弹出通知时使用默认推送消息声音。
+
+### 手动触发 (Manually Trigger)
+
+你可以在 Surge iOS 上长按脚本或使用系统的快捷指令 (Shortcuts) 应用来手动触发脚本。
+
+如果你使用快捷指令触发脚本，你可以选择向脚本传递一个参数，并使用 `$intent.parameter` 来获取它。
+
+## 脚本引擎 (Script Engine) iOS 5.9.0+ Mac 5.5.0+
+
+Surge 目前包含两个 JavaScript 脚本执行引擎。
+
+### JavaScriptCore (`engine=jsc`)
+
+*   优点：
+    1.  引擎初始化快，调用时开销低（低延迟）。
+*   缺点：
+    1.  由于 JSC 运行在 NE 进程内部，会导致 Surge NE 进程的内存占用显著增加，可能导致系统因超出内存限制而终止。
+
+### WebView (`engine=webview`)
+
+*   优点：
+    1.  由于 WebView 的实际运行环境在另一个独立的进程，脚本的执行对 NE 进程的内存使用几乎没有影响，不会导致 Surge NE 进程因内存占用问题被终止。
+    2.  WebView 的 JS 执行环境可以使用 JIT，大大提升了复杂或 CPU 密集型脚本的执行效率。
+    3.  可以使用 WebAPI。
+*   缺点：
+    1.  引擎的初始化时间开销略高。
+    2.  当脚本与 Surge 之间需要传输大量数据时，由于跨进程通信，效率较低，这在使用 `binary-body-mode` 处理较大请求时尤为明显。
+
+### 使用建议
+
+1.  对于小型、频繁调用、简单的脚本，如 Rule、DNS 类型的脚本，建议使用 JSC。
+2.  对于复杂、高内存消耗的脚本（例如解析 MB 级别 HTTP body 的 JSON），建议使用 WebView。
+
+### 配置方法
+
+在脚本配置行添加参数：`engine`，可配置为 `auto`、`jsc`、`webview`。
+
+*   默认值为 `auto`，在可用的情况下始终使用 WebView。
+*   如果脚本中使用了 WebAPI，应显式配置为 `webview`，以便脚本在不支持 WebView 的环境中执行时提示用户。
+
+### 引擎可用性
+
+*   iOS: JSC 和 WebView
+*   macOS
+    *   macOS 10.15 及以下版本: 仅限 JSC
+    *   macOS 11.0 及以上版本: JSC 和 WebView
+*   tvOS: 仅限 JSC

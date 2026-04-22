@@ -1,36 +1,33 @@
-# URL Scheme
+## Surge iOS 的 URL Scheme
 
-## URL Scheme（仅 Surge iOS）
+Surge iOS 支持 4 种动作和 1 个选项。
 
-Surge iOS 支持 4 种操作和 1 种参数。
+动作 (Action):
 
-操作：
+*   `surge:///start`
 
-* `surge:///start`
+    使用选定的配置启动。
 
-  启动当前选中的配置文件。
+*   `surge:///stop`
 
-* `surge:///stop`
+    停止当前会话。
 
-  停止当前会话。
+*   `surge:///toggle`
 
-* `surge:///toggle`
+    使用选定的配置启动或停止。
 
-  启动或停止当前选中的配置文件。
+*   `surge:///install-config?url=x`
 
-* `surge:///install-config?url=x`
+    从 URL 安装配置。该 URL 应使用百分号编码。
 
-  从某个 URL 安装配置文件。该 URL 需先通过百分号编码处理。
+选项 (Option):
 
-参数：
+*   `autoclose=true`
 
-* `autoclose=true`
+    动作完成后自动关闭 Surge。（不能与 `install-config` 一起使用）
 
-  操作完成时自动关闭 Surge。（不能与 `install-config` 一同使用）
-
-  样例：`surge:///toggle?autoclose=true`
+    示例：`surge:///toggle?autoclose=true`
 
 ## x-callback-url
 
-Surge 从 3.4 版本开始支持 x-callback-url 规范。URL 的 scheme 为 `surge`，可用的操作有 `start`、`stop` 和 `toggle`。
-
+Surge 从 v3.4 开始支持 `x-callback-url` 规范。URL Scheme 为 `surge`，可用的动作为 `start`、`stop` 和 `toggle`。

@@ -1,39 +1,35 @@
-# 脚本规则
+### 规则 (rule)
 
-使用脚本进行规则判定，该类型下第二参数为规则名。
+使用脚本作为规则。value 字段将被用作规则名称。
 
-```ini
-script = type=rule,script-path=rule.js
-```
+`rule ssid-rule script-path=ssid-rule.js`
 
-然后在 \[Rule\] 中加入规则：
+然后在 `[Rule]` 段落中添加一行：
 
-```text
-SCRIPT,ssid-rule,DIRECT
-```
+`SCRIPT,ssid-rule,DIRECT`
 
-脚本返回一个词典，字段 `matched<Boolean>` 表示是否匹配该规则。
+脚本应该返回一个带有 `matched` 属性的对象，以指示是否匹配。
 
-传入参数有：
+传入的参数包括：
 
-* `$request.hostname<String>`
-* `$request.destPort<Number>`
-* `$request.processPath<String>`
-* `$request.userAgent<String>`
-* `$request.url<String>`
-* `$request.sourceIP<String>`
-* `$request.listenPort<Number>`
-* `$request.dnsResult<Object>`
+*   `$request.hostname<String>`
+*   `$request.destPort<Number>`
+*   `$request.processPath<String>`
+*   `$request.userAgent<String>`
+*   `$request.url<String>`
+*   `$request.sourceIP<String>`
+*   `$request.listenPort<Number>`
+*   `$request.dnsResult<Object>`
+*   `$request.srcPort<Number>` iOS 5.8.4+ Mac 5.4.4+
+*   `$request.protocol<Number>` iOS 5.8.4+ Mac 5.4.4+
 
-默认情况下，SCRIPT 规则不会触发 DNS 解析，如果需要进行 DNS 解析，可使用 requires-resolve 修饰规则
+默认情况下，`SCRIPT` 规则不会触发 DNS 查询。您可以使用 `requires-resolve` 选项来更改此行为。
 
-```text
-SCRIPT,ssid-rule,DIRECT,requires-resolve
-```
+`SCRIPT,ssid-rule,DIRECT,requires-resolve`
 
-DNS 结果将出现在 `$request.dnsResult` 字段。
+DNS 结果包含在 `$request.dnsResult` 中。
 
-一个简单样例：
+一个简单的示例：
 
 ```javascript
 var hostnameMatched = ($request.hostname === 'home.com');

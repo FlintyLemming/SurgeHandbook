@@ -1,24 +1,26 @@
-# HTTP 响应
+### http-response
 
-用于修改 HTTP 返回体，该类型下第二参数为匹配 URL 的正则表达式，被匹配到的请求会被执行脚本。
+使用脚本修改 HTTP 响应。value 字段是一个正则表达式，用于匹配请求的 URL。
 
-传入参数为 `$request` 和 `$response`，字段为
+传入的参数包含 `$request` 和 `$response`：
 
-* `$request.url<String>`：请求的 URL
-* `$request.method<String>`：请求的 HTTP 方法
-* `$response.status<Number>`: 响应的 HTTP 状态码
-* `$response.headers<Object>`: 响应的 HTTP Headers
-* `$response.body<String>`: 响应的 HTTP Body，以 UTF-8 解码后的字符串，仅当 `requires-body=true` 时有效
+*   `$request.url<String>`: 请求的 URL。
+*   `$request.method<String>`：请求的 HTTP 方法。
+*   `$request.id<String>`: 用于在不同脚本间保持连续性的唯一 ID。
+*   `$request.headers<Object>`：请求的 HTTP 标头。
+*   `$response.status<Number>`: 响应的 HTTP 状态码。
+*   `$response.headers<Object>`: 响应的 HTTP 标头。
+*   `$response.body<String or Uint8Array>`: 响应的 HTTP body，如果未设置 `binary-mode`，则会使用 UTF-8 解码为字符串。仅在 `requires-body = true` 时存在。
 
-应执行 `$done` 返回一个对象，可选包含三个字段：
+脚本必须调用 `$done()` 并传入一个对象。该对象可以包含：
 
-* `body<String>`：使用该 body 覆盖原来的响应 body，仅当 `requires-body=true` 时有效
-* `headers<Object>`：使用该 headers 词典完全覆盖原来的 headers，注意部分 HTTP 特殊字段不可被修改，如 Content-Length
-* `status<Number>`：覆盖原来的 HTTP 状态码
+*   `body<String or Uint8Array>`: 使用新的 body 覆盖旧的 body。仅在 `requires-body = true` 时有效。
+*   `headers<Object>`: 使用新的 headers 覆盖所有旧的 headers。请注意，某些字段（例如 'Content-Length'）可能无法修改。
+*   `status<Number>`: 使用新的状态码覆盖旧的状态码。
 
-使用 `$done();` 表示终止该请求；使用 `$done({});` 表示不对该请求进行修改。
+您可以调用 `$done();` 来中止请求而不返回任何内容。或者使用 `$done({});` 保持响应不变。
 
-一个简单样例
+一个简单的示例：
 
 ```javascript
 let headers = $response.headers;
@@ -26,5 +28,3 @@ headers['X-Modified-By'] = 'Surge';
 
 $done({headers});
 ```
-
-注意样例使用了 JS ES6 语法。

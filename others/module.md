@@ -1,75 +1,106 @@
-# 模块
+# 模块 (Module)
 
-> 💡**本页文档来自**[**官方社区**](https://community.nssurge.com/d/225-module)，并对照手册对部分内容进行了修正
+模块是一组用于覆盖当前配置的设置。你可以使用模块来：
 
-Module（模块）是一系列设置的集合，可用于覆盖当前配置的部分设定，有非常多的使用场景：
+*   调整不可编辑配置（如托管配置和企业配置）中的设置。
+*   一键更改部分设置。例如，你可以使用模块为所有主机名开启 MitM，并临时调整过滤器。
+*   使用别人编写的模块来完成特定任务。例如，你的同事可能与你分享了一个将 API 请求重写为测试服务器的模块。
+*   当你在多台设备之间共享同一个配置时，针对不同的场景可能需要修改某些设置。模块的启用状态不会同步到其他设备，因此你可以使用模块来满足这一需求。
 
-* 微调不可编辑的配置的设定，如托管配置和企业配置。
-* 快捷的在不同工作环境中切换，比如临时开启对所有域名的 MitM 并调整过滤器。
-* 使用他人编写的模块以完成某些特定任务，比如，你的同事可以编写一个模块将应用的 API 请求重定向至测试服务器。
-* 如果你在多个设备间使用了同一份配置，有可能需要根据设备的使用场景进行微调。模块的开启状态是保存于当前设备的，可以用于在不同设备间的差异性修改。
+### 基本概念
 
-## 基本概念
+模块就像是对当前配置的补丁 (patch)。模块中的设置优先级高于配置中的设置。
 
-模块相当于给当前配置打补丁，其优先级要高于配置本身的设置。
+共有 3 种类型的模块：
 
-有三种模块：
+*   内部模块 (Internal Modules)：由 Surge 本身提供。
+*   本地模块 (Local Modules)：放置在配置目录中的 `.sgmodule` 文件。
+*   已安装模块 (Installed Modules)：通过 URL 安装的模块。
 
-* 内置模块：Surge 会预置一些模块，随着 Surge 自身更新。
-* 本地模块：放置在配置文件目录中的 .sgmodule 文件。
-* 安装的模块：从某个 URL 安装的模块。
+### 编写模块
 
-你可以同时开启多个模块，模块的开启状态保存于当前设备，不会进行同步。切换配置也不影响模块的开启状态。
+模块的语法与配置相同。允许你覆盖以下段落：
 
-## 编写模块
+*   `[General]`, `[MITM]`
 
-模块的内容和标准配置基本一致，目前支持调整以下段：
+    *   覆盖：`key = value`
+    *   追加至原始值：`key = %APPEND% value`
+    *   在原始值最前面插入：`key = %INSERT% value`
 
-* General, Replica, MITM
+        你只能在 `[MITM]` 段落中操作 `hostname`、`skip-server-cert-verify` 和 `tcp-connection` 字段。
 
-  * 直接覆盖原始值：`key = value`
-  * 在原始值的末尾进行追加：`key = %APPEND% value`
-  * 在原始值的开始进行插入：`key = %INSERT% value`
+        > 用于 HTTP 抓包功能的旧版 `[Replica]` 段落在 Surge Mac 5.4.0 中已被移除，因此模块不再需要对其进行补丁。
 
-  你只能在 MITM 段中操作 hostname 字段。
+*   `[WireGuard *]` 段落
 
-* Rule, Script, URL Rewrite, Header Rewrite, Host
+    WireGuard 策略存在于名称以 `WireGuard` 开头的段落中。模块可以像覆盖主配置一样，覆盖或追加这些段落内部的键值。
 
-  新加入的定义将会追加在原始内容的顶部。
+*   `[Ruleset *]` 段落
 
-  模块中的规则只可以使用 DIRECT、REJECT、REJECT-TINYGIF 三个内置策略。
+    当你定义内联规则集 (inline rulesets) 时，模块现在也可以对它们进行补丁，这对于提供内联列表的托管配置非常有用。
 
-* 元数据
+*   Rule, Script, URL Rewrite, Header Rewrite, Host
 
-  你可以在模块文件里添加元数据：
+    新行将插入到原始内容的顶部。
 
-  ```text
-  #!name=Name Here
-  #!desc=Description Here
-  ```
+    模块中的规则只能使用内部策略：`DIRECT`、`REJECT` 和 `REJECT-TINYGIF`。
 
-  （可选）你还可以限制模块的使用平台（可取值为 ios 和 mac）：
+*   Metadata (元数据)
 
-  ```text
-  #!system=mac
-  ```
+    你可以在模块文件中添加元数据：
 
-## 模块样例：
+    ```ini
+      #!name=模块名称
+      #!desc=模块的描述
+    ```
 
-```text
+    你可以将模块限制为仅在指定平台生效。（可选）
+
+    ```ini
+      #!system=mac
+    ```
+
+### 示例：
+
+```ini
 #!name=MitM All Hostnames
-#!desc=Perform MitM on all hostnames with port 443, except those to Apple and other common sites which can‘t be inspected. You still need to configure a CA certificate and enable the main switch of MitM.
+#!desc=对所有 443 端口的主机名执行 MitM，排除苹果和其他无法被检查的常见站点。你仍然需要配置 CA 证书并打开 MitM 的总开关。
 
 [MITM]
 hostname = -*.apple.com, -*.icloud.com, -*.mzstatic.com, -*.crashlytics.com, -*.facebook.com, -*.instagram.com, *
 ```
-
-```text
+```ini
 #!name=Game Console SNAT
-#!desc=Let Surge handle SNAT conversation properly for PlayStation, Xbox, and Nintendo Switch. Only useful if Surge Mac acts the router for these devices.
+#!desc=让 Surge 正确处理 PlayStation、Xbox 和 Nintendo Switch 的 SNAT 对话。仅当 Surge Mac 作为这些设备的路由器时才有用。
 #!system=mac
-
 [General]
 always-real-ip = %APPEND% *.srv.nintendo.net, *.stun.playstation.net, xbox.*.microsoft.com, *.xboxlive.com
 ```
 
+### 参数表 Mac 5.5.0+
+
+使用 `#!arguments` 元数据来声明用户在启用模块时可以自定义的参数。其语法遵循标准的查询字符串 (query-string)：
+
+```ini
+#!arguments=hostname=example.com&enable_mitm=true
+```
+
+每个键 (key) 会成为可用的占位符，如 `%hostname%`、`%enable_mitm%` 等，Surge 会在应用模块之前进行简单的文本替换。在 `#!arguments` 中定义的默认值会在 UI 中显示，并与该模块实例一起保存。
+
+> 请保持占位符为字母数字组合（例如，`%SERVER_HOST%`），以避免与配置语法发生冲突。删除参数时请移除未使用的占位符。
+
+### 运行环境要求 (Requirements) iOS 5.10.0+ Mac 5.6.0+
+
+模块添加了 `#!requirement=` 声明，以支持更复杂的使用条件限制。例如，如果模块使用了新加的 Body Rewrite 功能，它需要限制 Surge 核心版本。
+
+`#!requirement=CORE_VERSION>=20`
+
+它也支持逻辑表达式，例如：`CORE_VERSION>=20 && (SYSTEM = 'iOS' || SYSTEM = 'tvOS')`。
+
+可用于判断的变量如下：
+
+*   CORE\_VERSION: 数字，例如 `20`
+*   SYSTEM: 字符串，例如 `macOS`、`iOS`、`tvOS`
+*   SYSTEM\_VERSION: 字符串，例如 `Version 17.4.1 (Build 21E236)`
+*   DEVICE\_MODEL: 字符串，例如 `Mac15,8`
+*   LANGUAGE: 字符串，例如 `zh-Hans`
